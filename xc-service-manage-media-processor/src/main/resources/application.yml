@@ -5,11 +5,11 @@ spring:
     name: xc-service-manage-media-processor
   data:
     mongodb:
-      uri:  mongodb://localhost:27017
+      uri: mongodb://docker-base:27017
       database: xc_media
-#rabbitmq配置
+  #rabbitmq配置
   rabbitmq:
-    host: 127.0.0.1
+    host: docker-base
     port: 5672
     username: guest
     password: guest
@@ -18,5 +18,5 @@ xc-service-manage-media:
   mq:
     queue-media-video-processor: queue_media_video_processor
     routingkey-media-video: routingkey_media_video
-  video-location: F:/develop/video/
+  video-location: E:/develop/video/
   ffmpeg-path: E:/ffmpeg-20191126-59d264b-win64-static/bin/ffmpeg.exe

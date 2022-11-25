@@ -1,20 +1,11 @@
 package com.xuecheng.order.mq;
 
-import com.xuecheng.framework.domain.task.XcTask;
-import com.xuecheng.order.config.RabbitMQConfig;
 import com.xuecheng.order.service.TaskService;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 
 /**
  * @author Administrator
@@ -57,7 +48,7 @@ public class ChooseCourseTask {
     }*/
 
     @Scheduled(fixedDelay = 3000)
-    public void cancelOrder () {
+    public void cancelOrder() {
         taskService.updateOrderStatus();
     }
 
@@ -65,7 +56,7 @@ public class ChooseCourseTask {
 //    @Scheduled(cron="0/3 * * * * *")//每隔3秒去执行
 //       @Scheduled(fixedRate = 3000) //在任务开始后3秒执行下一次调度
 //       @Scheduled(fixedDelay = 3000) //在任务结束后3秒后才开始执行
-        public void task1(){
+    public void task1() {
         LOGGER.info("===============测试定时任务1开始===============");
         try {
             Thread.sleep(5000);
@@ -80,7 +71,7 @@ public class ChooseCourseTask {
 //    @Scheduled(cron="0/3 * * * * *")//每隔3秒去执行
 //    @Scheduled(fixedRate = 3000) //在任务开始后3秒执行下一次调度
 //       @Scheduled(fixedDelay = 3000) //在任务结束后3秒后才开始执行
-    public void task2(){
+    public void task2() {
         LOGGER.info("===============测试定时任务2开始===============");
         try {
             Thread.sleep(5000);

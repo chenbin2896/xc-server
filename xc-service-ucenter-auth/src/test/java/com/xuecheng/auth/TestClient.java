@@ -38,33 +38,33 @@ public class TestClient {
 
     //远程请求spring security获取令牌
     @Test
-    public void testClient(){
+    public void testClient() {
         //从eureka中获取认证服务的地址（因为spring security在认证服务中）
         //从eureka中获取认证服务的一个实例的地址
         ServiceInstance serviceInstance = loadBalancerClient.choose(XcServiceList.XC_SERVICE_UCENTER_AUTH);
         //此地址就是http://ip:port
         URI uri = serviceInstance.getUri();
         //令牌申请的地址 http://localhost:40400/auth/oauth/token
-        String authUrl = uri+ "/auth/oauth/token";
+        String authUrl = uri + "/auth/oauth/token";
         //定义header
         LinkedMultiValueMap<String, String> header = new LinkedMultiValueMap<>();
         String httpBasic = getHttpBasic("XcWebApp", "XcWebApp");
-        header.add("Authorization",httpBasic);
+        header.add("Authorization", httpBasic);
 
         //定义body
         LinkedMultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("grant_type","password");
-        body.add("username","itcast");
-        body.add("password","12322");
+        body.add("grant_type", "password");
+        body.add("username", "itcast");
+        body.add("password", "12322");
 
         HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(body, header);
         //String url, HttpMethod method, @Nullable HttpEntity<?> requestEntity, Class<T> responseType, Object... uriVariables
 
         //设置restTemplate远程调用时候，对400和401不让报错，正确返回数据
-        restTemplate.setErrorHandler(new DefaultResponseErrorHandler(){
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
             @Override
             public void handleError(ClientHttpResponse response) throws IOException {
-                if(response.getRawStatusCode()!=400 && response.getRawStatusCode()!=401){
+                if (response.getRawStatusCode() != 400 && response.getRawStatusCode() != 401) {
                     super.handleError(response);
                 }
             }
@@ -78,11 +78,11 @@ public class TestClient {
     }
 
     //获取httpbasic的串
-    private String getHttpBasic(String clientId,String clientSecret){
-        String string = clientId+":"+clientSecret;
+    private String getHttpBasic(String clientId, String clientSecret) {
+        String string = clientId + ":" + clientSecret;
         //将串进行base64编码
         byte[] encode = Base64Utils.encode(string.getBytes());
-        return "Basic "+new String(encode);
+        return "Basic " + new String(encode);
     }
 
 }

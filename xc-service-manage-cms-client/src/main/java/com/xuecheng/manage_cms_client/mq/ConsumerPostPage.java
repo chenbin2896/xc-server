@@ -30,13 +30,13 @@ public class ConsumerPostPage {
     PageService pageService;
 
     @RabbitListener(queues = {"${xuecheng.mq.queue}"})
-    public void postPage (String msg) {
-        Map map = JSON.parseObject(msg,Map.class);
-        log.info("receive cms post page:{}",msg.toString());
+    public void postPage(String msg) {
+        Map map = JSON.parseObject(msg, Map.class);
+        log.info("receive cms post page:{}", msg.toString());
         String pageId = (String) map.get("pageId");
         Optional<CmsPage> option = cmsPageRepository.findById(pageId);
         if (!option.isPresent()) {
-            log.error("receive cms post page,cmsPage is null ;{}",msg.toString());
+            log.error("receive cms post page,cmsPage is null ;{}", msg.toString());
             return;
         }
         pageService.savePageToServerPath(pageId);

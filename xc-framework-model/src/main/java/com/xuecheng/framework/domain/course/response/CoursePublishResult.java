@@ -15,6 +15,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class CoursePublishResult extends ResponseResult {
     String previewUrl;//页面预览的url，必须得到页面id才可以拼装
+
     public CoursePublishResult(ResultCode resultCode, String previewUrl) {
         super(resultCode);
         this.previewUrl = previewUrl;

@@ -160,11 +160,11 @@ public class CourseController extends BaseController implements CourseController
 
     @Override
     @GetMapping("/courseview/list/{ids}")
-    public Map<String,CourseBase> getCourseBaseList (@PathVariable("ids") String[] ids) {
-        Map<String,CourseBase> map = new HashMap<>();
-        for (String id :ids) {
+    public Map<String, CourseBase> getCourseBaseList(@PathVariable("ids") String[] ids) {
+        Map<String, CourseBase> map = new HashMap<>();
+        for (String id : ids) {
             CourseBase courseBaseById = courseService.findCourseBaseById(id);
-            map.put(id,courseBaseById);
+            map.put(id, courseBaseById);
         }
         return map;
     }

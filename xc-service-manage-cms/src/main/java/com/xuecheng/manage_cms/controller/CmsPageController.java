@@ -10,13 +10,8 @@ import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.manage_cms.service.PageService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Administrator
@@ -65,11 +60,11 @@ public class CmsPageController implements CmsPageControllerApi {
     @GetMapping("/get/{id}")
     public CmsPageResult findById(@PathVariable("id") String id) {
 
-        CmsPage cmsPage =  pageService.getById(id);
-        if (cmsPage !=null) {
-            return new CmsPageResult(CommonCode.SUCCESS,cmsPage);
+        CmsPage cmsPage = pageService.getById(id);
+        if (cmsPage != null) {
+            return new CmsPageResult(CommonCode.SUCCESS, cmsPage);
         }
-        return new CmsPageResult(CommonCode.FAIL,null);
+        return new CmsPageResult(CommonCode.FAIL, null);
     }
 
     @Override

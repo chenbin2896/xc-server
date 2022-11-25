@@ -16,7 +16,8 @@ import lombok.ToString;
 public class GetMediaResult extends ResponseResult {
     //视频播放地址
     String fileUrl;
-    public GetMediaResult(ResultCode resultCode,String fileUrl){
+
+    public GetMediaResult(ResultCode resultCode, String fileUrl) {
         super(resultCode);
         this.fileUrl = fileUrl;
     }

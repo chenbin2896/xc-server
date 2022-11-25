@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @Entity
-@Table(name="category")
+@Table(name = "category")
 @GenericGenerator(name = "jpa-assigned", strategy = "assigned")
 //@GenericGenerator(name = "jpa-uuid", strategy = "uuid")
 public class Category implements Serializable {

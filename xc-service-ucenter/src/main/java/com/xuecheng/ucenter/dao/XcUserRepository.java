@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface XcUserRepository extends JpaRepository<XcUser, String> {
 
-        XcUser findXcUserByUsername(String username);
+    XcUser findXcUserByUsername(String username);
 
 }

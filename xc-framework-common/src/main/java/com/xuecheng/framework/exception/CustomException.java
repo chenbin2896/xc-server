@@ -11,8 +11,8 @@ public class CustomException extends RuntimeException {
 
     private ResultCode resultCode;
 
-    public CustomException (ResultCode resultCode) {
-        super("错误代码"+resultCode.code()+"错误信息"+resultCode.message());
+    public CustomException(ResultCode resultCode) {
+        super("错误代码" + resultCode.code() + "错误信息" + resultCode.message());
         this.resultCode = resultCode;
     }
 

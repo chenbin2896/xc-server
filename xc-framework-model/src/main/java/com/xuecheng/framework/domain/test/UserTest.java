@@ -21,6 +21,6 @@ public class UserTest {
     private String id;
     private String name;
 
-    @Column(name="create_time")
+    @Column(name = "create_time")
     private Date createTime;
 }

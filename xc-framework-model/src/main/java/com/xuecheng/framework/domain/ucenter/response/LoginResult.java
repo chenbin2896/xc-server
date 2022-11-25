@@ -13,9 +13,10 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class LoginResult extends ResponseResult {
-    public LoginResult(ResultCode resultCode,String token) {
+    private String token;
+
+    public LoginResult(ResultCode resultCode, String token) {
         super(resultCode);
         this.token = token;
     }
-    private String token;
 }

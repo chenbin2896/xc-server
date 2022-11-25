@@ -27,7 +27,7 @@ public class TestJwt {
 
     //创建jwt令牌
     @Test
-    public void testCreateJwt(){
+    public void testCreateJwt() {
         //密钥库文件
         String keystore = "xc.keystore";
         //密钥库的密码
@@ -36,18 +36,18 @@ public class TestJwt {
         //密钥库文件路径
         ClassPathResource classPathResource = new ClassPathResource(keystore);
         //密钥别名
-        String alias  = "xckey";
+        String alias = "xckey";
         //密钥的访问密码
         String key_password = "xuecheng";
         //密钥工厂
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(classPathResource,keystore_password.toCharArray());
+        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(classPathResource, keystore_password.toCharArray());
         //密钥对（公钥和私钥）
         KeyPair keyPair = keyStoreKeyFactory.getKeyPair(alias, key_password.toCharArray());
         //获取私钥
         RSAPrivateKey aPrivate = (RSAPrivateKey) keyPair.getPrivate();
         //jwt令牌的内容
-        Map<String,String> body = new HashMap<>();
-        body.put("name","itcast");
+        Map<String, String> body = new HashMap<>();
+        body.put("name", "itcast");
         String bodyString = JSON.toJSONString(body);
         //生成jwt令牌
         Jwt jwt = JwtHelper.encode(bodyString, new RsaSigner(aPrivate));
@@ -59,7 +59,7 @@ public class TestJwt {
 
     //校验jwt令牌
     @Test
-    public void testVerify(){
+    public void testVerify() {
         //公钥
         String publickey = "-----BEGIN PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnASXh9oSvLRLxk901HANYM6KcYMzX8vFPnH/To2R+SrUVw1O9rEX6m1+rIaMzrEKPm12qPjVq3HMXDbRdUaJEXsB7NgGrAhepYAdJnYMizdltLdGsbfyjITUCOvzZ/QgM1M4INPMD+Ce859xse06jnOkCUzinZmasxrmgNV3Db1GtpyHIiGVUY0lSO1Frr9m5dpemylaT0BV3UwTQWVW9ljm6yR3dBncOdDENumT5tGbaDVyClV0FEB1XdSKd7VjiDCDbUAUbDTG1fm3K9sx7kO1uMGElbXLgMfboJ963HEJcU01km7BmFntqI5liyKheX+HBUCD4zbYNPw236U+7QIDAQAB-----END PUBLIC KEY-----";
         //jwt令牌

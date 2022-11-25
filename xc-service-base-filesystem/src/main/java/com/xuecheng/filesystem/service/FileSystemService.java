@@ -36,16 +36,16 @@ public class FileSystemService {
     FileSystemRepository fileSystemRepository;
 
     //上传文件
-    public UploadFileResult upload( MultipartFile multipartFile,
+    public UploadFileResult upload(MultipartFile multipartFile,
                                    String filetag,
                                    String businesskey,
-                                   String metadata){
-        if(multipartFile ==null){
+                                   String metadata) {
+        if (multipartFile == null) {
             ExceptionCast.cast(FileSystemCode.FS_UPLOADFILE_FILEISNULL);
         }
         //第一步：将文件上传到fastDFS中，得到一个文件id
         String fileId = fdfs_upload(multipartFile);
-        if(StringUtils.isEmpty(fileId)){
+        if (StringUtils.isEmpty(fileId)) {
             ExceptionCast.cast(FileSystemCode.FS_UPLOADFILE_SERVERFAIL);
         }
         //第二步：将文件id及其它文件信息存储到mongodb中。
@@ -56,7 +56,7 @@ public class FileSystemService {
         fileSystem.setBusinesskey(businesskey);
         fileSystem.setFileName(multipartFile.getOriginalFilename());
         fileSystem.setFileType(multipartFile.getContentType());
-        if(StringUtils.isNotEmpty(metadata)){
+        if (StringUtils.isNotEmpty(metadata)) {
             try {
                 Map map = JSON.parseObject(metadata, Map.class);
                 fileSystem.setMetadata(map);
@@ -65,20 +65,19 @@ public class FileSystemService {
             }
         }
         fileSystemRepository.save(fileSystem);
-        return new UploadFileResult(CommonCode.SUCCESS,fileSystem);
+        return new UploadFileResult(CommonCode.SUCCESS, fileSystem);
     }
 
     //上传文件到fastDFS
 
     /**
-     *
      * @param multipartFile 文件
      * @return 文件id
      */
-    private String fdfs_upload(MultipartFile multipartFile){
-         //初始化fastDFS的环境
-         initFdfsConfig();
-         //创建trackerClient
+    private String fdfs_upload(MultipartFile multipartFile) {
+        //初始化fastDFS的环境
+        initFdfsConfig();
+        //创建trackerClient
         TrackerClient trackerClient = new TrackerClient();
         try {
             TrackerServer trackerServer = trackerClient.getConnection();
@@ -86,7 +85,7 @@ public class FileSystemService {
 
             StorageServer storeStorage = trackerClient.getStoreStorage(trackerServer);
             //创建storageClient来上传文件
-            StorageClient1 storageClient1 = new StorageClient1(trackerServer,storeStorage);
+            StorageClient1 storageClient1 = new StorageClient1(trackerServer, storeStorage);
             //上传文件
             //得到文件字节
             byte[] bytes = multipartFile.getBytes();
@@ -103,7 +102,7 @@ public class FileSystemService {
     }
 
     //初始化fastDFS环境
-    private void initFdfsConfig(){
+    private void initFdfsConfig() {
         //初始化tracker服务地址（多个tracker中间以半角逗号分隔）
         try {
             ClientGlobal.initByTrackers(tracker_servers);

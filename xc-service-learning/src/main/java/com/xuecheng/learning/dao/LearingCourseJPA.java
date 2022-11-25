@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @date 2019/12/5
  * @description
  */
-public interface LearingCourseJPA extends JpaRepository<XcLearningCourse,String> {
+public interface LearingCourseJPA extends JpaRepository<XcLearningCourse, String> {
 }

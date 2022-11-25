@@ -47,7 +47,7 @@ public class TaskService {
     //查询前n条任务
     public List<XcTask> findXcTaskList(Date updateTime, int size) {
         //设置分页参数
-        Pageable pageable = new PageRequest(0, size);
+        Pageable pageable = PageRequest.of(0, size);
         //查询前n条任务
         Page<XcTask> all = xcTaskRepository.findByUpdateTimeBefore(pageable, updateTime);
         List<XcTask> list = all.getContent();
@@ -91,16 +91,16 @@ public class TaskService {
     }
 
     @Transactional
-    public void updateOrderStatus () {
-        List<XcOrders> xcordersByEndTimeBefore = xcOrderRepository.findAllByEndTimeBeforeAndStatusEquals(new Date(),"401001");
+    public void updateOrderStatus() {
+        List<XcOrders> xcordersByEndTimeBefore = xcOrderRepository.findAllByEndTimeBeforeAndStatusEquals(new Date(), "401001");
 
         List<String> collect = xcordersByEndTimeBefore.stream().map(XcOrders::getOrderNumber).collect(Collectors.toList());
         List<XcOrdersPay> allByOrderNumberIn = xcOrderPayRepository.findAllByOrderNumberIn(collect);
-        for (XcOrders x: xcordersByEndTimeBefore){
+        for (XcOrders x : xcordersByEndTimeBefore) {
             x.setStatus("401003");
         }
         xcOrderRepository.saveAll(xcordersByEndTimeBefore);
-        for (XcOrdersPay p :allByOrderNumberIn) {
+        for (XcOrdersPay p : allByOrderNumberIn) {
             p.setStatus("402003");
         }
         xcOrderPayRepository.saveAll(allByOrderNumberIn);

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Created by Administrator.
  */
-public interface TeachplanMediaPubRepository extends JpaRepository<TeachplanMediaPub,String> {
+public interface TeachplanMediaPubRepository extends JpaRepository<TeachplanMediaPub, String> {
     //根据课程id删除记录
     long deleteByCourseId(String courseId);
 }

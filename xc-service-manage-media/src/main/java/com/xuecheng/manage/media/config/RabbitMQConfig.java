@@ -15,17 +15,15 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
     public static final String EX_MEDIA_PROCESSTASK = "ex_media_processor";
-
-    //视频处理路由
-    @Value("${xc-service-manage-media.mq.routingkey-media-video}")
-    public  String routingkey_media_video;
-
     //消费者并发数量
     public static final int DEFAULT_CONCURRENT = 10;
-
+    //视频处理路由
+    @Value("${xc-service-manage-media.mq.routingkey-media-video}")
+    public String routingkey_media_video;
 
     /**
      * 交换机配置
+     *
      * @return the exchange
      */
     @Bean(EX_MEDIA_PROCESSTASK)

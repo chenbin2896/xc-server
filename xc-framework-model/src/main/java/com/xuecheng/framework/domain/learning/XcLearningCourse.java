@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 @ToString
 @Entity
-@Table(name="xc_learning_course")
+@Table(name = "xc_learning_course")
 @GenericGenerator(name = "jpa-uuid", strategy = "uuid")
 public class XcLearningCourse implements Serializable {
     private static final long serialVersionUID = -916357210051789799L;

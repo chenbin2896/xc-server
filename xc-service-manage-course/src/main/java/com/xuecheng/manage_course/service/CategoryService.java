@@ -5,7 +5,6 @@ import com.xuecheng.framework.domain.course.ext.CategoryNode;
 import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
-import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.manage_course.dao.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,12 +25,13 @@ public class CategoryService {
 
     /**
      * 查询课程分类
+     *
      * @return
      */
     public QueryResponseResult<CategoryNode> findCategoryList() {
         List<Category> categoriesList = categoryRepository.findAllByParentid("1");
         List<CategoryNode> categoryNodes = new ArrayList<>();
-        for (Category c :categoriesList) {
+        for (Category c : categoriesList) {
             CategoryNode categoryNode = new CategoryNode();
             categoryNode.setId(c.getId());
             categoryNode.setIsleaf(c.getIsleaf());
@@ -42,7 +42,7 @@ public class CategoryService {
             categoryNode.setParentid(c.getParentid());
             List<Category> children = categoryRepository.findAllByParentid(c.getId());
             List<CategoryNode> categoryNodes1 = new ArrayList<>();
-            for (Category ch :children) {
+            for (Category ch : children) {
                 CategoryNode categoryNode1 = new CategoryNode();
                 categoryNode1.setId(ch.getId());
                 categoryNode1.setIsleaf(ch.getIsleaf());
@@ -59,7 +59,7 @@ public class CategoryService {
         QueryResult<CategoryNode> queryResult = new QueryResult<>();
         queryResult.setList(categoryNodes);
         queryResult.setTotal(categoryNodes.size());
-        return new QueryResponseResult<>(CommonCode.SUCCESS,queryResult);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, queryResult);
 
     }
 }

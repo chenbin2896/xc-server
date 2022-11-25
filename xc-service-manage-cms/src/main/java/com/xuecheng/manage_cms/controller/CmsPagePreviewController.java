@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletOutputStream;
-import java.nio.charset.StandardCharsets;
 
 /**
  * @author Administrator
@@ -30,7 +29,7 @@ public class CmsPagePreviewController extends BaseController {
         if (StringUtils.isNotEmpty(pageHtml)) {
             try {
                 ServletOutputStream outputStream = response.getOutputStream();
-                response.setHeader("Content-type","text/html;charset=utf-8");
+                response.setHeader("Content-type", "text/html;charset=utf-8");
                 outputStream.write(pageHtml.getBytes("utf-8"));
             } catch (Exception e) {
                 e.printStackTrace();

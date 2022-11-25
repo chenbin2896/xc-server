@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @ToString
 @Entity
-@Table(name="xc_permission")
+@Table(name = "xc_permission")
 @GenericGenerator(name = "jpa-uuid", strategy = "uuid")
 public class XcPermission {
 
@@ -21,11 +21,11 @@ public class XcPermission {
     @GeneratedValue(generator = "jpa-uuid")
     @Column(length = 32)
     private String id;
-    @Column(name="roleId")
+    @Column(name = "roleId")
     private String role_id;
-    @Column(name="menuId")
+    @Column(name = "menuId")
     private String menu_id;
-    @Column(name="createTime")
+    @Column(name = "createTime")
     private Date create_time;
 
 

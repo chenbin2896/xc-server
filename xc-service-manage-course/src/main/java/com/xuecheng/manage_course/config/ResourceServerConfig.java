@@ -22,9 +22,12 @@ import java.util.stream.Collectors;
 /**
  * @author Administrator
  * @version 1.0
- **//*
+ * <p>
+ * 获取非对称加密公钥 Key
+ * @return 公钥 Key
+ *//*
 
-*/
+ */
 /*@Configuration
 @EnableResourceServer
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)//激活方法上的PreAuthorize注解*//*
@@ -49,9 +52,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     }
     */
 /**
-     * 获取非对称加密公钥 Key
-     * @return 公钥 Key
-     *//*
+ * 获取非对称加密公钥 Key
+ * @return 公钥 Key
+ *//*
 
     private String getPubKey() {
         Resource resource = new ClassPathResource(PUBLIC_KEY);

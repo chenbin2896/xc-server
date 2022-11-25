@@ -38,11 +38,11 @@ public class ManageCmsApplicationTest {
     PageService pageService;
 
     @Test
-    public  void testPage() {
+    public void testPage() {
         try {
             String pageHtml = pageService.getPageHtml("5a795ac7dd573c04508f3a56");
             System.out.println(pageHtml);
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -52,10 +52,10 @@ public class ManageCmsApplicationTest {
     }
 
     @Test
-    public void fsTest () throws Exception{
+    public void fsTest() throws Exception {
         File file = new File("C:/Users/User/Desktop/course.ftl");
         FileInputStream fileInputStream = new FileInputStream(file);
-        ObjectId store = fsTemplate.store(fileInputStream, "修改后的文件课程详情","");
+        ObjectId store = fsTemplate.store(fileInputStream, "修改后的文件课程详情", "");
         System.out.println(store);
         Scanner scanner = new Scanner(System.in);
         int a = scanner.nextInt();
@@ -63,7 +63,7 @@ public class ManageCmsApplicationTest {
     }
 
     @Test
-    public void testFindAll(){
+    public void testFindAll() {
         List<CmsPage> all = cmsPageRepository.findAll();
         System.out.println(all);
 
@@ -71,11 +71,11 @@ public class ManageCmsApplicationTest {
 
     //分页查询
     @Test
-    public void testFindPage(){
+    public void testFindPage() {
         //分页参数
         int page = 1;//从0开始
         int size = 10;
-        Pageable pageable = PageRequest.of(page,size);
+        Pageable pageable = PageRequest.of(page, size);
         Page<CmsPage> all = cmsPageRepository.findAll(pageable);
         System.out.println(all);
     }
@@ -85,7 +85,7 @@ public class ManageCmsApplicationTest {
     public void testUpdate() {
         //查询对象
         Optional<CmsPage> optional = cmsPageRepository.findById("5b4b1d8bf73c6623b03f8cec");
-        if(optional.isPresent()){
+        if (optional.isPresent()) {
             CmsPage cmsPage = optional.get();
             //设置要修改值
             cmsPage.setPageAliase("test01");
@@ -99,7 +99,7 @@ public class ManageCmsApplicationTest {
 
     //根据页面名称查询
     @Test
-    public void testfindByPageName(){
+    public void testfindByPageName() {
         CmsPage cmsPage = cmsPageRepository.findByPageName("测试页面");
         System.out.println(cmsPage);
     }

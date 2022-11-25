@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface CourseMapper {
-   CourseBase findCourseBaseById(String id);
-   Page<CourseInfo> findCourseListPage  (CourseListRequest courseListRequest);
+    CourseBase findCourseBaseById(String id);
+
+    Page<CourseInfo> findCourseListPage(CourseListRequest courseListRequest);
 }

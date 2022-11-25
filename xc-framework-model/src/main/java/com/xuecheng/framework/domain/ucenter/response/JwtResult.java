@@ -13,9 +13,10 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class JwtResult extends ResponseResult {
+    private String jwt;
+
     public JwtResult(ResultCode resultCode, String jwt) {
         super(resultCode);
         this.jwt = jwt;
     }
-    private String jwt;
 }

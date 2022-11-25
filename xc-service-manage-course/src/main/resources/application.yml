@@ -5,9 +5,9 @@ spring:
     name: xc-service-manage-course
   datasource:
     druid:
-      url: jdbc:mysql://localhost:3306/xc_course?characterEncoding=utf-8
+      url: jdbc:mysql://docker-base:3306/xc_course?characterEncoding=utf-8&useSSL=false
       username: root
-      password: root
+      password: 123456
       driverClassName: com.mysql.jdbc.Driver
       initialSize: 5  #初始建立连接数量
       minIdle: 5  #最小连接数量
@@ -25,21 +25,10 @@ spring:
         format-sql: true
   data:
     mongodb:
-      uri:  mongodb://localhost:27017
+      uri: mongodb://docker-base:27017
       database: xc_cms
 pagehelper:
   helper-dialect: mysql
-
-eureka:
-  client:
-    register-with-eureka: true
-    fetch-registry: true
-    service-url:
-      defaultZone: http://localhost:50101/eureka
-  instance:
-    prefer-ip-address: true
-    ip-address: ${IP_ADDRESS:127.0.0.1}
-    instance-id: ${spring.application.name}:${server.port}
 
 course-publish:
   siteId: 5de5db869b8ebb432cede9c1

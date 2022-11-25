@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Created by Administrator.
  */
-public interface CoursePubRepository extends JpaRepository<CoursePub,String> {
+public interface CoursePubRepository extends JpaRepository<CoursePub, String> {
 }

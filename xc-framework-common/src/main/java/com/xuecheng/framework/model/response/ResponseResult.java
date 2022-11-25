@@ -26,23 +26,24 @@ public class ResponseResult<T> implements Response {
 
     T data;
 
-    public ResponseResult(ResultCode resultCode){
+    public ResponseResult(ResultCode resultCode) {
         this.success = resultCode.success();
         this.code = resultCode.code();
         this.message = resultCode.message();
     }
 
-    public ResponseResult(String message,T data){
+    public ResponseResult(String message, T data) {
         this.data = data;
         this.success = true;
         this.code = 0;
         this.message = "操作成功";
     }
 
-    public static ResponseResult SUCCESS(){
+    public static ResponseResult SUCCESS() {
         return new ResponseResult(CommonCode.SUCCESS);
     }
-    public static ResponseResult FAIL(){
+
+    public static ResponseResult FAIL() {
         return new ResponseResult(CommonCode.FAIL);
     }
 

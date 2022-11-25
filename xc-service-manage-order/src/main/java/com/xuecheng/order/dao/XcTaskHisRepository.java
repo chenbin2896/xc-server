@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * Created by Administrator.
  */
-public interface XcTaskHisRepository extends JpaRepository<XcTaskHis,String> {
+public interface XcTaskHisRepository extends JpaRepository<XcTaskHis, String> {
 }

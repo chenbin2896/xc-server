@@ -28,8 +28,8 @@ public class CourseLearningController extends BaseController implements CourseLe
     @Override
     @GetMapping("/course/getmedia/{courseId}/{teachplanId}")
     public GetMediaResult getmedia(@PathVariable("courseId") String courseId,
-                                   @PathVariable("teachplanId")String teachplanId) {
-        return learningService.getmedia(courseId,teachplanId);
+                                   @PathVariable("teachplanId") String teachplanId) {
+        return learningService.getmedia(courseId, teachplanId);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class CourseLearningController extends BaseController implements CourseLe
         return learningService.addOpenCourse(xcLearningCourse);
     }
 
-    private String getUserId () {
+    private String getUserId() {
         XcOauth2Util xcOauth2Util = new XcOauth2Util();
         XcOauth2Util.UserJwt userJwt = xcOauth2Util.getUserJwtFromHeader(request);
         //当前用户ID

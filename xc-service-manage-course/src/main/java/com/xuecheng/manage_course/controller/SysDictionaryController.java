@@ -1,11 +1,7 @@
 package com.xuecheng.manage_course.controller;
 
-import com.xuecheng.api.course.CategoryControllerApi;
 import com.xuecheng.api.course.SysDicthinaryControllerApi;
-import com.xuecheng.framework.domain.course.Category;
 import com.xuecheng.framework.domain.system.SysDictionary;
-import com.xuecheng.framework.model.response.QueryResponseResult;
-import com.xuecheng.manage_course.service.CategoryService;
 import com.xuecheng.manage_course.service.SysDictionaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

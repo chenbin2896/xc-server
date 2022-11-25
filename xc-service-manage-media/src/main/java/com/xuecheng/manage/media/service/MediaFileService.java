@@ -25,38 +25,38 @@ public class MediaFileService {
 
     //查询我的媒资列表
     public QueryResponseResult findList(int page, int size, QueryMediaFileRequest queryMediaFileRequest) {
-        if(queryMediaFileRequest == null){
+        if (queryMediaFileRequest == null) {
             queryMediaFileRequest = new QueryMediaFileRequest();
         }
         //条件值对象
         MediaFile mediaFile = new MediaFile();
-        if(StringUtils.isNotEmpty(queryMediaFileRequest.getTag())){
+        if (StringUtils.isNotEmpty(queryMediaFileRequest.getTag())) {
             mediaFile.setTag(queryMediaFileRequest.getTag());
         }
-        if(StringUtils.isNotEmpty(queryMediaFileRequest.getFileOriginalName())){
+        if (StringUtils.isNotEmpty(queryMediaFileRequest.getFileOriginalName())) {
             mediaFile.setFileOriginalName(queryMediaFileRequest.getFileOriginalName());
         }
-        if(StringUtils.isNotEmpty(queryMediaFileRequest.getProcessStatus())){
+        if (StringUtils.isNotEmpty(queryMediaFileRequest.getProcessStatus())) {
             mediaFile.setProcessStatus(queryMediaFileRequest.getProcessStatus());
         }
 
         //条件匹配器
         ExampleMatcher exampleMatcher = ExampleMatcher.matching()
-                                        .withMatcher("tag",ExampleMatcher.GenericPropertyMatchers.contains())
-                                        .withMatcher("fileOriginalName",ExampleMatcher.GenericPropertyMatchers.contains());
+                .withMatcher("tag", ExampleMatcher.GenericPropertyMatchers.contains())
+                .withMatcher("fileOriginalName", ExampleMatcher.GenericPropertyMatchers.contains());
 //                                        .withMatcher("processStatus",ExampleMatcher.GenericPropertyMatchers.exact());//如果不设置匹配器默认精确匹配
 
         //定义example条件对象
-        Example<MediaFile> example = Example.of(mediaFile,exampleMatcher);
+        Example<MediaFile> example = Example.of(mediaFile, exampleMatcher);
         //分页查询对象
-        if(page<=0){
+        if (page <= 0) {
             page = 1;
         }
-        page = page-1;
-        if(size<=0){
+        page = page - 1;
+        if (size <= 0) {
             size = 10;
         }
-        Pageable pageable = new PageRequest(page,size);
+        Pageable pageable = PageRequest.of(page, size);
         //分页查询
         Page<MediaFile> all = mediaFileRepository.findAll(example, pageable);
         //总记录数
@@ -69,6 +69,6 @@ public class MediaFileService {
         queryResult.setTotal(total);
 
         //返回结果
-        return new QueryResponseResult(CommonCode.SUCCESS,queryResult);
+        return new QueryResponseResult(CommonCode.SUCCESS, queryResult);
     }
 }

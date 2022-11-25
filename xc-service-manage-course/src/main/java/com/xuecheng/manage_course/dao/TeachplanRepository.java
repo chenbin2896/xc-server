@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Administrator.
  */
-public interface TeachplanRepository extends JpaRepository<Teachplan,String> {
+public interface TeachplanRepository extends JpaRepository<Teachplan, String> {
     //SELECT * FROM teachplan WHERE courseid = '297e7c7c62b888f00162b8a7dec20000' AND parentid='0'
     List<Teachplan> findByCourseidAndParentid(String courseId, String parentId);
 }

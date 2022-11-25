@@ -1,6 +1,5 @@
 package com.xuecheng.framework.domain.course.request;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.xuecheng.framework.model.request.RequestData;
 import lombok.Data;
 import lombok.ToString;

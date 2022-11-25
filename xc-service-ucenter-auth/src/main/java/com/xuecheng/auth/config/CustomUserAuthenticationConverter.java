@@ -25,18 +25,18 @@ public class CustomUserAuthenticationConverter extends DefaultUserAuthentication
 
         Object principal = authentication.getPrincipal();
         UserJwt userJwt = null;
-        if(principal instanceof  UserJwt){
+        if (principal instanceof UserJwt) {
             userJwt = (UserJwt) principal;
-        }else{
+        } else {
             //refresh_token默认不去调用userdetailService获取用户信息，这里我们手动去调用，得到 UserJwt
             UserDetails userDetails = userDetailsService.loadUserByUsername(name);
             userJwt = (UserJwt) userDetails;
         }
         response.put("name", userJwt.getName());
         response.put("id", userJwt.getId());
-        response.put("utype",userJwt.getUtype());
-        response.put("userpic",userJwt.getUserpic());
-        response.put("companyId",userJwt.getCompanyId());
+        response.put("utype", userJwt.getUtype());
+        response.put("userpic", userJwt.getUserpic());
+        response.put("companyId", userJwt.getCompanyId());
         if (authentication.getAuthorities() != null && !authentication.getAuthorities().isEmpty()) {
             response.put("authorities", AuthorityUtils.authorityListToSet(authentication.getAuthorities()));
         }

@@ -27,9 +27,9 @@ public class EsCourseController implements SearchControllerApi {
     EsCourseService esCourseService;
 
     @Override
-    @GetMapping(value="/list/{page}/{size}")
-    public QueryResponseResult<CoursePub> list(@PathVariable("page") int page,@PathVariable("size") int size, CourseSearchParam courseSearchParam) {
-        return esCourseService.list(page,size,courseSearchParam);
+    @GetMapping(value = "/list/{page}/{size}")
+    public QueryResponseResult<CoursePub> list(@PathVariable("page") int page, @PathVariable("size") int size, CourseSearchParam courseSearchParam) {
+        return esCourseService.list(page, size, courseSearchParam);
     }
 
     @Override
@@ -39,15 +39,15 @@ public class EsCourseController implements SearchControllerApi {
     }
 
     @Override
-    @GetMapping(value="/getmedia/{teachplanId}")
+    @GetMapping(value = "/getmedia/{teachplanId}")
     public TeachplanMediaPub getmedia(@PathVariable("teachplanId") String teachplanId) {
         //将一个id加入数组，传给service方法
         String[] teachplanIds = new String[]{teachplanId};
         QueryResponseResult<TeachplanMediaPub> queryResponseResult = esCourseService.getmedia(teachplanIds);
         QueryResult<TeachplanMediaPub> queryResult = queryResponseResult.getQueryResult();
-        if(queryResult != null){
+        if (queryResult != null) {
             List<TeachplanMediaPub> list = queryResult.getList();
-            if(list !=null && list.size()>0){
+            if (list != null && list.size() > 0) {
                 return list.get(0);
             }
         }

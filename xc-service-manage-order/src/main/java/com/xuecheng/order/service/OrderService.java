@@ -1,7 +1,5 @@
 package com.xuecheng.order.service;
 
-import com.alibaba.fastjson.JSON;
-import com.xuecheng.framework.domain.learning.XcLearningCourse;
 import com.xuecheng.framework.domain.order.XcOrders;
 import com.xuecheng.framework.domain.order.XcOrdersDetail;
 import com.xuecheng.framework.domain.order.XcOrdersPay;
@@ -40,7 +38,7 @@ public class OrderService {
     @Autowired
     LearningCourseClient learningCourseClient;
 
-    public ResponseResult saveOrder (XcOrders xcOrders) {
+    public ResponseResult saveOrder(XcOrders xcOrders) {
 
         XcOrders xcOrders1 = new XcOrders();
         xcOrders1.setStatus("401001");
@@ -65,23 +63,23 @@ public class OrderService {
             });
         }
         xcOrderRepository.save(xcOrders);
-        return new ResponseResult("操作成功",xcOrders);
+        return new ResponseResult("操作成功", xcOrders);
     }
 
-    public ResponseResult batchSaveXcOrderDetail (List<XcOrdersDetail> xcOrdersDetails) {
+    public ResponseResult batchSaveXcOrderDetail(List<XcOrdersDetail> xcOrdersDetails) {
         List<XcOrdersDetail> xcOrdersDetails1 = xcOrderDetailRepository.saveAll(xcOrdersDetails);
-        if (xcOrdersDetails1.size()== xcOrdersDetails.size()) {
+        if (xcOrdersDetails1.size() == xcOrdersDetails.size()) {
             return new ResponseResult(CommonCode.SUCCESS);
         }
         return new ResponseResult(CommonCode.FAIL);
     }
 
-    public QueryResponseResult<XcOrders> list (int page,int size, XcOrders xcOrders) {
+    public QueryResponseResult<XcOrders> list(int page, int size, XcOrders xcOrders) {
         ExampleMatcher exampleMatcher = ExampleMatcher.matching();
-        Example<XcOrders> example = Example.of(xcOrders,exampleMatcher);
+        Example<XcOrders> example = Example.of(xcOrders, exampleMatcher);
 
-        Pageable pageable = new PageRequest(page-1,size);
-        Page<XcOrders> all = xcOrderRepository.findAll(example,pageable);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<XcOrders> all = xcOrderRepository.findAll(example, pageable);
         QueryResult<XcOrders> queryResult = new QueryResult<>();
 
         List<XcOrders> xcOrdersList = new ArrayList<>();
@@ -96,7 +94,7 @@ public class OrderService {
 
         queryResult.setTotal(all.getTotalElements());
         queryResult.setList(xcOrdersList);
-        return new QueryResponseResult<>(CommonCode.SUCCESS,queryResult);
+        return new QueryResponseResult<>(CommonCode.SUCCESS, queryResult);
     }
 
     public ResponseResult<XcOrders> get(String orderNum) {
@@ -105,7 +103,7 @@ public class OrderService {
     }
 
     @Transactional
-    public boolean updateOrderPayStatus (String orderNum,String payNum) {
+    public boolean updateOrderPayStatus(String orderNum, String payNum) {
         XcOrdersPay xcOrdersPay = new XcOrdersPay();
         xcOrdersPay.setOrderNumber(orderNum);
         Example<XcOrdersPay> example = Example.of(xcOrdersPay);
@@ -130,7 +128,7 @@ public class OrderService {
         }
 
         //添加课程
-        if (!courseId.equals("")){
+        if (!courseId.equals("")) {
             learningCourseClient.addopencourse(courseId);
             return true;
         }

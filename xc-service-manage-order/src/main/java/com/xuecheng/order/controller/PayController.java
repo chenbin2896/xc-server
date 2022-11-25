@@ -1,9 +1,7 @@
 package com.xuecheng.order.controller;
 
-import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
-import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.xuecheng.framework.web.BaseController;
 import com.xuecheng.order.config.AlipayConfig;
@@ -126,13 +124,13 @@ public class PayController extends BaseController {
                     //判断该笔订单是否在商户网站中已经做过处理
                     //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                     //如果有做过处理，不执行商户的业务程序
-                    orderService.updateOrderPayStatus(out_trade_no,trade_no);
+                    orderService.updateOrderPayStatus(out_trade_no, trade_no);
                     //注意：
                     //退款日期超过可退款期限后（如三个月可退款），支付宝系统发送该交易状态通知
 
                 } else if (trade_status.equals("TRADE_SUCCESS")) {
                     System.out.println("success");
-                    orderService.updateOrderPayStatus(out_trade_no,trade_no);
+                    orderService.updateOrderPayStatus(out_trade_no, trade_no);
                     //判断该笔订单是否在商户网站中已经做过处理
                     //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                     //如果有做过处理，不执行商户的业务程序
@@ -149,7 +147,7 @@ public class PayController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/returnUrl",method = RequestMethod.GET)
+    @RequestMapping(value = "/returnUrl", method = RequestMethod.GET)
     public String returnUrl() {
         return "redirect:http://ucenter.xuecheng.com/#/order";
     }

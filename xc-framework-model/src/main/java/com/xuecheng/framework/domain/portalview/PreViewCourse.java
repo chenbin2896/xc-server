@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @Document(collection = "pre_view_course")
-public class PreViewCourse implements Serializable{
+public class PreViewCourse implements Serializable {
 
     @Id
     private String id;

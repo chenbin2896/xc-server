@@ -11,11 +11,11 @@ import org.springframework.context.annotation.ComponentScan;
  * @description
  */
 @SpringBootApplication
-@EntityScan("com.xuecheng.framework.domain.cms")//扫描实体类
-@ComponentScan(basePackages={"com.xuecheng.framework"})//扫描common下的所有类
-@ComponentScan(basePackages={"com.xuecheng.manage_cms_client"})
+@EntityScan("com.xuecheng.framework.domain.cms")
+@ComponentScan(basePackages = {"com.xuecheng.framework"})
+@ComponentScan(basePackages = {"com.xuecheng.manage_cms_client"})
 public class ManageCmsClientApplication {
     public static void main(String[] args) {
-        SpringApplication.run(ManageCmsClientApplication.class,args);
+        SpringApplication.run(ManageCmsClientApplication.class, args);
     }
 }

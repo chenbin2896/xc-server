@@ -8,6 +8,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * @date 2019/11/24
  * @description
  */
-public interface SysDictionaryRepository extends MongoRepository<SysDictionary,String> {
+public interface SysDictionaryRepository extends MongoRepository<SysDictionary, String> {
     public SysDictionary findByDType(String type);
 }

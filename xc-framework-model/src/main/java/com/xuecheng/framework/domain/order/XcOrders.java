@@ -30,12 +30,12 @@ public class XcOrders implements Serializable {
     @Column(name = "start_time")
     @JsonFormat(
             pattern = "yyyy-MM-dd HH:mm:ss",
-            timezone = "GMT+8" )
+            timezone = "GMT+8")
     private Date startTime;
     @Column(name = "end_time")
     @JsonFormat(
             pattern = "yyyy-MM-dd HH:mm:ss",
-            timezone = "GMT+8" )
+            timezone = "GMT+8")
     private Date endTime;
     private String status;
     @Column(name = "user_id")

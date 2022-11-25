@@ -13,7 +13,7 @@ import java.util.Date;
 @Data
 @ToString
 @Entity
-@Table(name="xc_user")
+@Table(name = "xc_user")
 @GenericGenerator(name = "jpa-uuid", strategy = "uuid")
 public class XcUser {
 
@@ -32,9 +32,9 @@ public class XcUser {
     private String email;
     private String phone;
     private String status;
-    @Column(name="create_time")
+    @Column(name = "create_time")
     private Date createTime;
-    @Column(name="update_time")
+    @Column(name = "update_time")
     private Date updateTime;
 
 

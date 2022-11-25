@@ -14,7 +14,7 @@ import java.util.Date;
  * @author Administrator
  * @version 1.0
  **/
-public interface XcTaskRepository extends JpaRepository<XcTask,String> {
+public interface XcTaskRepository extends JpaRepository<XcTask, String> {
     //查询某个时间之间的前n条任务
     Page<XcTask> findByUpdateTimeBefore(Pageable pageable, Date updateTime);
 

@@ -5,7 +5,6 @@ import com.xuecheng.framework.domain.media.MediaFile;
 import com.xuecheng.framework.domain.media.request.QueryMediaFileRequest;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.manage.media.service.MediaFileService;
-import com.xuecheng.manage.media.service.MediaFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +23,6 @@ public class MediaFileController implements MediaFileControllerApi {
     @Override
     @GetMapping("/list/{page}/{size}")
     public QueryResponseResult<MediaFile> findList(int page, int size, QueryMediaFileRequest queryMediaFileRequest) {
-        return mediaFileService.findList(page,size,queryMediaFileRequest);
+        return mediaFileService.findList(page, size, queryMediaFileRequest);
     }
 }

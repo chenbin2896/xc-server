@@ -20,6 +20,6 @@ public class ReportCompany {
     private Long course_num;//课程数
     private Long student_num;//学生人数
     private Long play_num;//播放次数
-    
+
 
 }

@@ -44,7 +44,7 @@ public class OrderController extends BaseController implements XcOrderController
         XcOrders xcOrders = new XcOrders();
 
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.HOUR_OF_DAY,2);
+        calendar.add(Calendar.HOUR_OF_DAY, 2);
 
         xcOrders.setStartTime(new Date());
         xcOrders.setEndTime(calendar.getTime());
@@ -52,7 +52,7 @@ public class OrderController extends BaseController implements XcOrderController
         xcOrders.setUserId(getUserId());
 
         CourseView courseview = courseBaseClient.courseview(createOrderRequest.getCourseId());
-        xcOrders.setInitialPrice(courseview.getCourseMarket().getPrice_old()==null?courseview.getCourseMarket().getPrice():courseview.getCourseMarket().getPrice_old());
+        xcOrders.setInitialPrice(courseview.getCourseMarket().getPrice_old() == null ? courseview.getCourseMarket().getPrice() : courseview.getCourseMarket().getPrice_old());
         xcOrders.setPrice(courseview.getCourseMarket().getPrice());
         xcOrders.setStatus("401001");
 
@@ -62,14 +62,14 @@ public class OrderController extends BaseController implements XcOrderController
         xcOrdersDetail.setItemPrice(courseview.getCourseMarket().getPrice());
         xcOrdersDetail.setOrderNumber(xcOrders.getOrderNumber());
         xcOrdersDetail.setStartTime(new Date());
-        xcOrdersDetail.setEndTime(new Date(System.currentTimeMillis()+10*60*1000));
+        xcOrdersDetail.setEndTime(new Date(System.currentTimeMillis() + 10 * 60 * 1000));
         xcOrdersDetail.setValid("204001");
         List<XcOrdersDetail> list = new ArrayList<>();
         list.add(xcOrdersDetail);
         String xcDetail = JSON.toJSONString(list);
         xcOrders.setDetails(xcDetail);
         ResponseResult responseResult = orderService.saveOrder(xcOrders);
-        if (!responseResult.isSuccess()){
+        if (!responseResult.isSuccess()) {
             return responseResult;
         }
         ResponseResult responseResult1 = orderService.batchSaveXcOrderDetail(list);
@@ -90,7 +90,6 @@ public class OrderController extends BaseController implements XcOrderController
     public ResponseResult getOrderById(@PathVariable("orderNum") String orderNum) {
         return orderService.get(orderNum);
     }
-
 
 
     private String getUserId() {

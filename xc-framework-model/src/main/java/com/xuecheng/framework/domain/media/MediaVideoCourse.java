@@ -33,13 +33,13 @@ public class MediaVideoCourse {
     private String hls_m3u8;
     private List<String> hls_ts_list;
 
-    public MediaVideoCourse(String fileId,String courseid,String chapter){
+    public MediaVideoCourse(String fileId, String courseid, String chapter) {
         this.fileId = fileId;
         this.courseid = courseid;
         this.chapter = chapter;
-        this.id = MD5Util.getStringMD5(courseid+chapter);
+        this.id = MD5Util.getStringMD5(courseid + chapter);
         this.processType = "302002";//生成 hls
-        this.processStatus="303001";//未处理
+        this.processStatus = "303001";//未处理
     }
 
 }

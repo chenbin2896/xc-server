@@ -30,28 +30,26 @@ import java.security.KeyPair;
 @EnableAuthorizationServer
 class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
     @Autowired
-    private DataSource dataSource;
-    //jwt令牌转换器
-    @Autowired
-    private JwtAccessTokenConverter jwtAccessTokenConverter;
-    @Autowired
     UserDetailsService userDetailsService;
     @Autowired
     AuthenticationManager authenticationManager;
     @Autowired
     TokenStore tokenStore;
     @Autowired
+    private DataSource dataSource;
+    //jwt令牌转换器
+    @Autowired
+    private JwtAccessTokenConverter jwtAccessTokenConverter;
+    @Autowired
     private CustomUserAuthenticationConverter customUserAuthenticationConverter;
+    @Resource(name = "keyProp")
+    private KeyProperties keyProperties;
 
     //读取密钥的配置
     @Bean("keyProp")
     public KeyProperties keyProperties() {
         return new KeyProperties();
     }
-
-    @Resource(name = "keyProp")
-    private KeyProperties keyProperties;
-
 
     //客户端配置
     @Bean
