@@ -378,14 +378,10 @@ public class PageService {
             ExceptionCast.cast(CommonCode.INVALID_PARAM);
         }
         ObjectId objectId = null;
-        try {
-            //将htmlContent内容转成输入流
-            InputStream inputStream = IOUtils.toInputStream(htmlContent, "utf-8");
-            //将html文件内容保存到GridFS
-            objectId = gridFsTemplate.store(inputStream, cmsPage.getPageName());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        //将htmlContent内容转成输入流
+        InputStream inputStream = IOUtils.toInputStream(htmlContent, "utf-8");
+        //将html文件内容保存到GridFS
+        objectId = gridFsTemplate.store(inputStream, cmsPage.getPageName());
 
         //将html文件id更新到cmsPage中
         cmsPage.setHtmlFileId(objectId.toHexString());

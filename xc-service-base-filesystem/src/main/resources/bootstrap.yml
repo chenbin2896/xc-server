@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: xc-service-base-filesystem
+  cloud:
+    nacos:
+      discovery:
+        server-addr: docker-base:8848
+      config:
+        server-addr: docker-base:8848
+        file-extension: yaml

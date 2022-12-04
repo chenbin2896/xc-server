@@ -41,7 +41,7 @@ public class EsCourseController implements SearchControllerApi {
     @Override
     @GetMapping(value = "/getmedia/{teachplanId}")
     public TeachplanMediaPub getmedia(@PathVariable("teachplanId") String teachplanId) {
-        //将一个id加入数组，传给service方法
+
         String[] teachplanIds = new String[]{teachplanId};
         QueryResponseResult<TeachplanMediaPub> queryResponseResult = esCourseService.getmedia(teachplanIds);
         QueryResult<TeachplanMediaPub> queryResult = queryResponseResult.getQueryResult();

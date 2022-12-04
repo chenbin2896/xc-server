@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 public class ExceptionCatch {
 
-    private static final Logger log = (Logger) LoggerFactory.getLogger(ExceptionCatch.class);
+    private static final Logger log = LoggerFactory.getLogger(ExceptionCatch.class);
     protected static ImmutableMap.Builder<Class<? extends Throwable>, ResultCode> builder = ImmutableMap.builder();
     private static ImmutableMap<Class<? extends Throwable>, ResultCode> EXCEPTIONS;
 

@@ -40,6 +40,7 @@ public class EsCourseService {
 
     @Autowired
     RestHighLevelClient restHighLevelClient;
+
     @Value("${xuecheng.course.index}")
     private String index;
     @Value("${xuecheng.media.index}")
@@ -187,9 +188,8 @@ public class EsCourseService {
         }
 
         queryResult.setList(list);
-        QueryResponseResult<CoursePub> queryResponseResult = new QueryResponseResult<CoursePub>(CommonCode.SUCCESS, queryResult);
 
-        return queryResponseResult;
+        return new QueryResponseResult<CoursePub>(CommonCode.SUCCESS, queryResult);
     }
 
     //使用ES的客户端向ES请求查询索引信息

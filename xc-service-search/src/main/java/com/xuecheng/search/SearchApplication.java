@@ -6,11 +6,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.ComponentScan;
 
-/**
- * @author User
- * @date 2019/11/25
- * @description
- */
 @SpringBootApplication
 @EnableDiscoveryClient
 @EntityScan("com.xuecheng.framework.domain.search")//扫描实体类

@@ -3,9 +3,10 @@ server:
 spring:
   application:
     name: xc-service-search
-xuecheng:
   elasticsearch:
-    hostlist: ${eshostlist:docker-base:9200} #多个结点中间用逗号分隔
+    uris: docker-base:9200
+
+xuecheng:
   course:
     index: xc_course_2
     type: course2
