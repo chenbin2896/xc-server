@@ -16,23 +16,22 @@ import org.springframework.stereotype.Component;
 public class QiNiuConfig {
 
     @Value("${qiniu.oss.accessKey}")
-    private static  String accessKey;
+    private String accessKey;
 
     @Value("${qiniu.oss.secretKey}")
-    private static  String secretKey;
+    private String secretKey;
 
     @Value("${qiniu.oss.bucket}")
-    private static  String bucket;
+    private String bucket;
 
     @Bean
-    public UploadManager uploadManager (){
+    public UploadManager uploadManager() {
         Configuration cfg = new Configuration(Region.huadong());
         cfg.resumableUploadAPIVersion = Configuration.ResumableUploadAPIVersion.V2;
         return new UploadManager(cfg);
     }
 
-    public static String getToken () {
-
+    public String getToken() {
         Auth auth = Auth.create(accessKey, secretKey);
         return auth.uploadToken(bucket);
     }

@@ -34,7 +34,9 @@ public class FileSystemService {
     @Autowired
     private UploadManager uploadManager;
 
-    //上传文件
+    @Autowired
+    private QiNiuConfig qiNiuConfig;
+
     public UploadFileResult upload(MultipartFile multipartFile,
                                           String filetag,
                                           String businesskey,
@@ -42,7 +44,7 @@ public class FileSystemService {
         if (multipartFile == null) {
             ExceptionCast.cast(FileSystemCode.FS_UPLOADFILE_FILEISNULL);
         }
-        //第一步：将文件上传到fastDFS中，得到一个文件id
+
         byte[] bytes = multipartFile.getBytes();
         String fileId = uploadByQiNiu(bytes);
 
@@ -51,11 +53,12 @@ public class FileSystemService {
         }
         //第二步：将文件id及其它文件信息存储到mongodb中。
         FileSystem fileSystem = new FileSystem();
-        fileSystem.setFileId(fileId);
+//        fileSystem.setFileId(fileId);
         fileSystem.setFilePath(fileId);
         fileSystem.setFiletag(filetag);
+        fileSystem.setFileSize(multipartFile.getSize());
         fileSystem.setBusinesskey(businesskey);
-        fileSystem.setFileName(multipartFile.getOriginalFilename());
+        fileSystem.setFileName(multipartFile.getName());
         fileSystem.setFileType(multipartFile.getContentType());
         if (StringUtils.isNotEmpty(metadata)) {
             try {
@@ -71,7 +74,7 @@ public class FileSystemService {
 
     private String uploadByQiNiu(byte[] bytes) throws QiniuException {
 
-        Response response = uploadManager.put(bytes, null, QiNiuConfig.getToken());
+        Response response = uploadManager.put(bytes, System.currentTimeMillis()+"", qiNiuConfig.getToken());
         String info = response.bodyString();
         JSONObject jsonObject = JSON.parseObject(info);
 
