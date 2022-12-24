@@ -17,8 +17,7 @@ public class UcenterController implements UcenterControllerApi {
 
     @Override
     @GetMapping("/getuserext")
-    public XcUserExt getUserext(@RequestAttribute String userId, @RequestParam("username") String username) {
-        System.out.println(userId+ "...................");
+    public XcUserExt getUserext(@RequestParam("username") String username) {
         return userService.getUserExt(username);
     }
 

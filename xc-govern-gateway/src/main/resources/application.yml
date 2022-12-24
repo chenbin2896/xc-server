@@ -34,6 +34,12 @@ spring:
             - Path=/api/ucenter/**
           filters:
             - StripPrefix=1
+        - id: xc-service-ucenter-auth
+          uri: lb://xc-service-ucenter-auth
+          predicates:
+            - Path=/api/auth/**
+          filters:
+            - StripPrefix=1
 
 
         - id: xc-service-order

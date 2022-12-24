@@ -1,148 +1,144 @@
+/*
+ * Copyright 2020-2022 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.xuecheng.auth.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.bootstrap.encrypt.KeyProperties;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
+import com.xuecheng.auth.jose.Jwks;
+import com.xuecheng.auth.security.FederatedIdentityConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
-import org.springframework.security.oauth2.provider.ClientDetailsService;
-import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
-import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
-import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.authorization.OAuth2AuthorizationServerConfigurer;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.oidc.OidcScopes;
+import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
+import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsentService;
+import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService;
+import org.springframework.security.oauth2.server.authorization.client.JdbcRegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
+import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import javax.annotation.Resource;
-import javax.sql.DataSource;
-import java.security.KeyPair;
+import java.util.UUID;
 
-
-@Configuration
-@EnableAuthorizationServer
-class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-    @Autowired
-    UserDetailsService userDetailsService;
-    @Autowired
-    AuthenticationManager authenticationManager;
-    @Autowired
-    TokenStore tokenStore;
-    @Autowired
-    private DataSource dataSource;
-    //jwt令牌转换器
-    @Autowired
-    private JwtAccessTokenConverter jwtAccessTokenConverter;
-    @Autowired
-    private CustomUserAuthenticationConverter customUserAuthenticationConverter;
-    @Resource(name = "keyProp")
-    private KeyProperties keyProperties;
-
-    //读取密钥的配置
-    @Bean("keyProp")
-    public KeyProperties keyProperties() {
-        return new KeyProperties();
-    }
-
-    //客户端配置
-    @Bean
-    public ClientDetailsService clientDetails() {
-        return new JdbcClientDetailsService(dataSource);
-    }
-
-    @Override
-    public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(this.dataSource).clients(this.clientDetails());
-       /* clients.inMemory()
-                .withClient("XcWebApp")//客户端id
-                .secret("XcWebApp")//密码，要保密
-                .accessTokenValiditySeconds(60)//访问令牌有效期
-                .refreshTokenValiditySeconds(60)//刷新令牌有效期
-                //授权客户端请求认证服务的类型authorization_code：根据授权码生成令牌，
-                // client_credentials:客户端认证，refresh_token：刷新令牌，password：密码方式认证
-                .authorizedGrantTypes("authorization_code", "client_credentials", "refresh_token", "password")
-                .scopes("app");//客户端范围，名称自定义，必填*/
-    }
-
-    //token的存储方法
-//    @Bean
-//    public InMemoryTokenStore tokenStore() {
-//        //将令牌存储到内存
-//        return new InMemoryTokenStore();
-//    }
-//    @Bean
-//    public TokenStore tokenStore(RedisConnectionFactory redisConnectionFactory){
-//        RedisTokenStore redisTokenStore = new RedisTokenStore(redisConnectionFactory);
-//        return redisTokenStore;
-//    }
-    @Bean
-    @Autowired
-    public TokenStore tokenStore(JwtAccessTokenConverter jwtAccessTokenConverter) {
-        return new JwtTokenStore(jwtAccessTokenConverter);
-    }
+/**
+ * @author Steve Riesenberg
+ * @since 0.2.3
+ */
+@Configuration(proxyBeanMethods = false)
+public class AuthorizationServerConfig {
 
     @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter(CustomUserAuthenticationConverter customUserAuthenticationConverter) {
-        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-        KeyPair keyPair = new KeyStoreKeyFactory
-                (keyProperties.getKeyStore().getLocation(), keyProperties.getKeyStore().getSecret().toCharArray())
-                .getKeyPair(keyProperties.getKeyStore().getAlias(), keyProperties.getKeyStore().getPassword().toCharArray());
-        converter.setKeyPair(keyPair);
-        //配置自定义的CustomUserAuthenticationConverter
-        DefaultAccessTokenConverter accessTokenConverter = (DefaultAccessTokenConverter) converter.getAccessTokenConverter();
-        accessTokenConverter.setUserTokenConverter(customUserAuthenticationConverter);
-        return converter;
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
+
+        // ----- 自定义登录页面
+        OAuth2AuthorizationServerConfigurer<HttpSecurity> authorizationServerConfigurer = new OAuth2AuthorizationServerConfigurer();
+        authorizationServerConfigurer
+                .authorizationEndpoint(authorizationEndpoint ->
+                        authorizationEndpoint.consentPage("/oauth2/consent"));
+
+        RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
+        http.requestMatcher(endpointsMatcher).authorizeRequests((authorizeRequests) -> {
+            ((ExpressionUrlAuthorizationConfigurer.AuthorizedUrl) authorizeRequests.anyRequest()).authenticated();
+        }).csrf((csrf) -> {
+            csrf.ignoringRequestMatchers(new RequestMatcher[]{endpointsMatcher});
+        }).apply(authorizationServerConfigurer);
+
+        // -- 集成第三方登录
+        http.apply(new FederatedIdentityConfigurer());
+        return http.build();
     }
 
-    //授权服务器端点配置
-    @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        /*Collection<TokenEnhancer> tokenEnhancers = applicationContext.getBeansOfType(TokenEnhancer.class).values();
-        TokenEnhancerChain tokenEnhancerChain=new TokenEnhancerChain();
-        tokenEnhancerChain.setTokenEnhancers(new ArrayList<>(tokenEnhancers));
 
-        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setReuseRefreshToken(true);
-        defaultTokenServices.setSupportRefreshToken(true);
-        defaultTokenServices.setTokenStore(tokenStore);
-        defaultTokenServices.setAccessTokenValiditySeconds(1111111);
-        defaultTokenServices.setRefreshTokenValiditySeconds(1111111);
-        defaultTokenServices.setTokenEnhancer(tokenEnhancerChain);
-
-        endpoints
-                .authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService)
-                        //.tokenStore(tokenStore);
-                .tokenServices(defaultTokenServices);*/
-        endpoints.accessTokenConverter(jwtAccessTokenConverter)
-                .authenticationManager(authenticationManager)//认证管理器
-                .tokenStore(tokenStore)//令牌存储
-                .userDetailsService(userDetailsService);//用户信息service
-    }
-
-    //授权服务器的安全配置
-    @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-//        oauthServer.checkTokenAccess("isAuthenticated()");//校验token需要认证通过，可采用http basic认证
-        oauthServer.allowFormAuthenticationForClients()
-                .passwordEncoder(new BCryptPasswordEncoder())
-                .tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()");
-    }
-
-    //采用bcrypt对密码进行Hash
+    // @formatter:off
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public RegisteredClientRepository registeredClientRepository(JdbcTemplate jdbcTemplate) {
+        RegisteredClient registeredClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("messaging-client")
+                .clientSecret("{noop}secret")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .redirectUri("http://127.0.0.1:8080/api/login/oauth2/code/messaging-client-oidc")
+                .redirectUri("http://127.0.0.1:8080/api/userInfo")
+                .scope(OidcScopes.OPENID)
+                .scope("message.read")
+                .scope("message.write")
+                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
+                .build();
+
+        // Save registered client in db as if in-memory
+        JdbcRegisteredClientRepository registeredClientRepository = new JdbcRegisteredClientRepository(jdbcTemplate);
+        registeredClientRepository.save(registeredClient);
+
+        return registeredClientRepository;
+    }
+    // @formatter:on
+
+    @Bean
+    public OAuth2AuthorizationService authorizationService(JdbcTemplate jdbcTemplate, RegisteredClientRepository registeredClientRepository) {
+        return new JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
     }
 
+    @Bean
+    public OAuth2AuthorizationConsentService authorizationConsentService(JdbcTemplate jdbcTemplate, RegisteredClientRepository registeredClientRepository) {
+        return new JdbcOAuth2AuthorizationConsentService(jdbcTemplate, registeredClientRepository);
+    }
+
+    @Bean
+    public JWKSource<SecurityContext> jwkSource() {
+        RSAKey rsaKey = Jwks.generateRsa();
+        JWKSet jwkSet = new JWKSet(rsaKey);
+        return (jwkSelector, securityContext) -> jwkSelector.select(jwkSet);
+    }
+
+    @Bean
+    public ProviderSettings providerSettings() {
+        return ProviderSettings.builder().issuer("http://www.test.com/api").build();
+    }
+
+    @Bean
+    public EmbeddedDatabase embeddedDatabase() {
+        // @formatter:off
+        return new EmbeddedDatabaseBuilder()
+                .generateUniqueName(true)
+                .setType(EmbeddedDatabaseType.H2)
+                .setScriptEncoding("UTF-8")
+                .addScript("org/springframework/security/oauth2/server/authorization/oauth2-authorization-schema.sql")
+                .addScript("org/springframework/security/oauth2/server/authorization/oauth2-authorization-consent-schema.sql")
+                .addScript("org/springframework/security/oauth2/server/authorization/client/oauth2-registered-client-schema.sql")
+                .build();
+        // @formatter:on
+    }
 
 }
-

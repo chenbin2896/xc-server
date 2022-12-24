@@ -12,3 +12,4 @@ whitelist:
   include:
     - /api/ucenter/getuserext
     - /api/ucenter/getUserById
+    - /api/auth/login
