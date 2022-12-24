@@ -9,5 +9,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
  * @description
  */
 public interface SysDictionaryRepository extends MongoRepository<SysDictionary, String> {
-    public SysDictionary findByDType(String type);
+    public SysDictionary findBydType(String type);
 }

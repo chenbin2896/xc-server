@@ -2,9 +2,12 @@ server:
   port: 50201
   servlet:
     context-path: /api
+
 spring:
   application:
     name: xc-govern-gateway
+  main:
+    web-application-type: reactive
   redis:
     host: ${REDIS_HOST:docker-base}
     port: ${REDIS_PORT:6379}
@@ -16,21 +19,26 @@ spring:
         - id: xc-service-manage-course
           uri: lb://xc-service-manage-course
           predicates:
-            - path: /course/**
+            - Path=/course/**
         - id: xc-service-learning
           uri: lb://xc-service-learning
           predicates:
-            - path: /learning/**
+            - Path=/learning/**
         - id: xc-service-manage-cms
           uri: lb://xc-service-manage-cms
           predicates:
-            - path: /cms/**,/sys/**
+            - Path=/cms/**,/sys/**
         - id: xc-service-ucenter
           uri: lb://xc-service-ucenter
           predicates:
-            - path: /ucenter/**
+            - Path=/api/ucenter/**
+          filters:
+            - StripPrefix=1
+
 
         - id: xc-service-order
           uri: lb://xc-service-order
           predicates:
-            - path: /order/**
+            - Path=/order/**
+
+

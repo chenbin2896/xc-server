@@ -17,6 +17,6 @@ public class SysDictionaryService {
     SysDictionaryRepository sysDictionaryRepository;
 
     public SysDictionary findByType(String type) {
-        return sysDictionaryRepository.findByDType(type);
+        return sysDictionaryRepository.findBydType(type);
     }
 }

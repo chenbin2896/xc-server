@@ -433,16 +433,15 @@ public class CourseService {
     }
 
     //查询我的课程
-    public QueryResponseResult<CourseInfo> findCourseList(String company_id, int page, int size, CourseListRequest courseListRequest) {
+    public QueryResponseResult<CourseInfo> findCourseList(String companyId, String userId, int page, int size, CourseListRequest courseListRequest) {
         if (courseListRequest == null) {
             courseListRequest = new CourseListRequest();
         }
-        //将公司id参数传入dao
-        courseListRequest.setCompanyId(company_id);
+
         //分页
         PageHelper.startPage(page, size);
         //调用dao
-        Page<CourseInfo> courseListPage = courseMapper.findCourseListPage(courseListRequest);
+        Page<CourseInfo> courseListPage = courseMapper.findCourseListPage(companyId, userId, courseListRequest);
         List<CourseInfo> list = courseListPage.getResult();
         long total = courseListPage.getTotal();
         QueryResult<CourseInfo> courseIncfoQueryResult = new QueryResult<CourseInfo>();

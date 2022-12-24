@@ -8,7 +8,7 @@ import lombok.ToString;
 @Data
 @ToString
 @NoArgsConstructor
-public class ResponseResult<T> implements Response {
+public class ResponseResult implements Response {
 
     //操作是否成功
     boolean success = SUCCESS;
@@ -19,7 +19,7 @@ public class ResponseResult<T> implements Response {
     //提示信息
     String message;
 
-    T data;
+    Object data;
 
     public ResponseResult(ResultCode resultCode) {
         this.success = resultCode.success();
@@ -27,11 +27,18 @@ public class ResponseResult<T> implements Response {
         this.message = resultCode.message();
     }
 
-    public ResponseResult(String message, T data) {
+    public ResponseResult(ResultCode resultCode, Object data) {
+        this.success = resultCode.success();
+        this.code = resultCode.code();
+        this.message = resultCode.message();
+        this.data = data;
+    }
+
+    public ResponseResult(String message, Object data) {
         this.data = data;
         this.success = true;
         this.code = 0;
-        this.message = "操作成功";
+        this.message = message;
     }
 
     public static ResponseResult SUCCESS() {
@@ -40,6 +47,11 @@ public class ResponseResult<T> implements Response {
 
     public static ResponseResult FAIL() {
         return new ResponseResult(CommonCode.FAIL);
+    }
+
+
+    public static ResponseResult SUCCESS (Object data) {
+        return new ResponseResult(CommonCode.SUCCESS, data);
     }
 
 }

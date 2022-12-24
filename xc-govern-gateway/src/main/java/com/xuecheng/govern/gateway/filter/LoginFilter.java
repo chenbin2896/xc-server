@@ -1,6 +1,8 @@
 package com.xuecheng.govern.gateway.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.xuecheng.framework.utils.AesUtil;
+import com.xuecheng.govern.gateway.common.WhiteList;
 import com.xuecheng.govern.gateway.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -10,12 +12,13 @@ import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.RequestPath;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
-import org.springframework.util.MultiValueMap;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
@@ -36,6 +39,9 @@ public class LoginFilter implements GlobalFilter, Ordered {
 
     @Autowired
     AuthService authService;
+
+    @Autowired
+    WhiteList whiteList;
 
     //拒绝访问
     private Mono<Void> accessDenied(ServerWebExchange exchange) {
@@ -60,17 +66,22 @@ public class LoginFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         log.info("global filter.....");
 
+
         //得到request
         ServerHttpRequest request = exchange.getRequest();
 
-        //取cookie中的身份令牌
-        MultiValueMap<String, HttpCookie> cookieMultiValueMap = request.getCookies();
-        HttpCookie cookie = cookieMultiValueMap.getFirst("uid");
+        RequestPath path = request.getPath();
+        System.out.println(path.contextPath());
 
-        if (cookie == null || StringUtils.isEmpty(cookie.getValue())) {
-            //拒绝访问
-            return accessDenied(exchange);
+        for (String url : whiteList.getInclude()) {
+            PathMatcher matcher = new AntPathMatcher();
+
+            boolean match = matcher.match(url, path.value());
+            if (match) {
+                return chain.filter(exchange);
+            }
         }
+
         //从header中取jwt
         HttpHeaders headers = request.getHeaders();
         String authorization = headers.getFirst("Authorization");
@@ -82,12 +93,6 @@ public class LoginFilter implements GlobalFilter, Ordered {
             return accessDenied(exchange);
         }
 
-        //从redis取出jwt的过期时间
-        Long expire = authService.getExpire(cookie.getValue());
-        if (expire == null || expire < 0) {
-            //拒绝访问
-            return accessDenied(exchange);
-        }
         return chain.filter(exchange);
     }
 
@@ -97,5 +102,11 @@ public class LoginFilter implements GlobalFilter, Ordered {
         return 0;
     }
 
+    public static void main(String[] args) {
 
+
+        String encode = AesUtil.encode("123123");
+
+        System.out.println(encode);
+    }
 }

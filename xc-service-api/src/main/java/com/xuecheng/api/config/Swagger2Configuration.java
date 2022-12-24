@@ -22,7 +22,7 @@ public class Swagger2Configuration {
     public GroupedOpenApi publicApi() {
         return GroupedOpenApi.builder()
                 .group("xc")
-                .pathsToMatch("/learning/**", "/cms/**")
+                .pathsToMatch("/learning/**", "/cms/**", "/**")
                 .build();
     }
 

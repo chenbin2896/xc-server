@@ -8,3 +8,7 @@ spring:
       config:
         server-addr: docker-base:8848
         file-extension: yaml
+whitelist:
+  include:
+    - /api/ucenter/getuserext
+    - /api/ucenter/getUserById

@@ -5,6 +5,7 @@ import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -15,5 +16,7 @@ import org.springframework.stereotype.Repository;
 public interface CourseMapper {
     CourseBase findCourseBaseById(String id);
 
-    Page<CourseInfo> findCourseListPage(CourseListRequest courseListRequest);
+    Page<CourseInfo> findCourseListPage(@Param("companyId") String companyId
+                                        , @Param("userId") String userId,
+                                        @Param("request") CourseListRequest courseListRequest);
 }

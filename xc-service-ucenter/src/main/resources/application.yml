@@ -1,5 +1,7 @@
 server:
   port: 40300
+  servlet:
+    context-path: /ucenter
 spring:
   application:
     name: xc-service-ucenter

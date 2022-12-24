@@ -8,8 +8,7 @@
         where id = #{id}
     </select>
 
-    <select id="findCourseListPage" resultType="com.xuecheng.framework.domain.course.ext.CourseInfo"
-            parameterType="com.xuecheng.framework.domain.course.request.CourseListRequest">
+    <select id="findCourseListPage" resultType="com.xuecheng.framework.domain.course.ext.CourseInfo">
         select
         course_base.*,course_base.company_id as companyId,course_base.user_id as userId,
         (select pic from course_pic where courseid = course_base.id) pic
@@ -18,6 +17,9 @@
         <where>
             <if test="companyId != null and companyId !=''">
                 course_base.company_id = ${companyId}
+            </if>
+            <if test="userId != null and userId !=''">
+                course_base.user_id = ${useId}
             </if>
         </where>
 

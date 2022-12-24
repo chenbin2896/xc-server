@@ -1,6 +1,6 @@
 spring:
   application:
-    name: xc‐service‐manage‐cms‐client
+    name: xc-service-manage-course
   cloud:
     nacos:
       discovery:

@@ -3,7 +3,6 @@ package com.xuecheng.api.course;
 import com.xuecheng.framework.domain.course.*;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.CourseView;
-import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
 import com.xuecheng.framework.domain.course.response.CoursePublishResult;
 import com.xuecheng.framework.model.response.QueryResponseResult;
@@ -20,16 +19,16 @@ import java.util.Map;
 @Tag(name = "课程管理接口", description = "课程管理接口，提供课程的增、删、改、查")
 public interface CourseControllerApi {
     @Operation(summary = "课程计划查询")
-    public TeachplanNode findTeachplanList(String courseId);
+    public ResponseResult findTeachplanList(String courseId);
 
     @Operation(summary = "添加课程计划")
     public ResponseResult addTeachplan(Teachplan teachplan);
 
     @Operation(summary = "查询我的课程列表")
-    public QueryResponseResult<CourseInfo> findCourseList(int page, int size, CourseListRequest courseListRequest);
+    public QueryResponseResult<CourseInfo> findCourseList(String userId, int page, int size, CourseListRequest courseListRequest);
 
     @Operation(summary = "添加课程")
-    public ResponseResult addCourseBase(CourseBase courseBase);
+    public ResponseResult addCourseBase(String userId, CourseBase courseBase);
 
     @Operation(summary = "获取课程基础信息")
     public CourseBase getCourseBaseById(String courseId);

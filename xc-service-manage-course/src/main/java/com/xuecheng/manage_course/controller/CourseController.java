@@ -7,11 +7,12 @@ import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
 import com.xuecheng.framework.domain.course.response.CoursePublishResult;
+import com.xuecheng.framework.domain.ucenter.ext.XcUserExt;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
-import com.xuecheng.framework.utils.XcOauth2Util;
 import com.xuecheng.framework.web.BaseController;
 import com.xuecheng.manage_course.client.CmsPageClient;
+import com.xuecheng.manage_course.client.UserServiceClient;
 import com.xuecheng.manage_course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,9 @@ public class CourseController extends BaseController implements CourseController
     @Autowired
     CmsPageClient cmaPageClient;
 
+    @Autowired
+    UserServiceClient userServiceClient;
+
     /**
      * 添加课程
      *
@@ -41,10 +45,12 @@ public class CourseController extends BaseController implements CourseController
      */
     @Override
     @PostMapping("/coursebase/add")
-    public ResponseResult addCourseBase(@RequestBody CourseBase courseBase) {
-        //String compaynId = getCompanyId();
-        //courseBase.setCompanyId(companyId);
-        courseBase.setCompanyId("1");
+    public ResponseResult addCourseBase(@RequestAttribute String userId, @RequestBody CourseBase courseBase) {
+        XcUserExt user = userServiceClient.getUserById(userId);
+
+        courseBase.setCompanyId(user.getCompanyId());
+        courseBase.setUserId(userId);
+
         return courseService.add(courseBase);
     }
 
@@ -102,8 +108,10 @@ public class CourseController extends BaseController implements CourseController
     //@PreAuthorize("hasAuthority('course_teachplan_list')")
     @Override
     @GetMapping("/teachplan/list/{courseId}")
-    public TeachplanNode findTeachplanList(@PathVariable("courseId") String courseId) {
-        return courseService.findTeachplanList(courseId);
+    public ResponseResult findTeachplanList(@PathVariable("courseId") String courseId) {
+        TeachplanNode teachplanList = courseService.findTeachplanList(courseId);
+        return ResponseResult.SUCCESS(teachplanList);
+
     }
 
     //@PreAuthorize("hasAuthority('course_teachplan_add')")
@@ -171,20 +179,14 @@ public class CourseController extends BaseController implements CourseController
 
     @Override
     @PostMapping("/courseinfo/list/{page}/{size}")
-    public QueryResponseResult<CourseInfo> findCourseList(@PathVariable("page") int page,
+    public QueryResponseResult<CourseInfo> findCourseList(@RequestAttribute String userId,
+                                                          @PathVariable("page") int page,
                                                           @PathVariable("size") int size,
                                                           @RequestBody CourseListRequest courseListRequest) {
-        //String compaynId = getCompanyId();
-        String company_id = "1";
-        return courseService.findCourseList(company_id, page, size, courseListRequest);
+
+        XcUserExt user = userServiceClient.getUserById(userId);
+
+
+        return courseService.findCourseList(user.getCompanyId(), userId, page, size, courseListRequest);
     }
-
-    private String getCompanyId() {
-        XcOauth2Util xcOauth2Util = new XcOauth2Util();
-        XcOauth2Util.UserJwt userJwt = xcOauth2Util.getUserJwtFromHeader(request);
-        //当前用户所属单位的id
-        return userJwt.getCompanyId();
-    }
-
-
 }

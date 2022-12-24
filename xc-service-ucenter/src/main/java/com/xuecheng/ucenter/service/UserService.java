@@ -41,8 +41,21 @@ public class UserService {
         if (xcUser == null) {
             return null;
         }
-        //用户id
-        String userId = xcUser.getId();
+        XcUserExt xcUserExt = getUserExtById(xcUser.getId());
+        BeanUtils.copyProperties(xcUser, xcUserExt);
+        return xcUserExt;
+    }
+
+    public XcUserExt getUserById(String userId) {
+        //根据账号查询xcUser信息
+        XcUser xcUser = xcUserRepository.findById(userId).orElse(new XcUser());
+
+        XcUserExt xcUserExt = getUserExtById(userId);
+        BeanUtils.copyProperties(xcUser, xcUserExt);
+        return xcUserExt;
+    }
+
+    public XcUserExt getUserExtById(String userId) {
         //查询用户所有权限
         List<XcMenu> xcMenus = xcMenuMapper.selectPermissionByUserId(userId);
 
@@ -54,7 +67,6 @@ public class UserService {
             companyId = xcCompanyUser.getCompanyId();
         }
         XcUserExt xcUserExt = new XcUserExt();
-        BeanUtils.copyProperties(xcUser, xcUserExt);
         xcUserExt.setCompanyId(companyId);
         //设置权限
         xcUserExt.setPermissions(xcMenus);
