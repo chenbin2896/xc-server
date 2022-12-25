@@ -1,7 +1,5 @@
 server:
   port: 50201
-  servlet:
-    context-path: /api
 
 spring:
   application:
@@ -19,7 +17,9 @@ spring:
         - id: xc-service-manage-course
           uri: lb://xc-service-manage-course
           predicates:
-            - Path=/course/**
+            - Path=/api/course/**
+          filters:
+            - StripPrefix=1
         - id: xc-service-learning
           uri: lb://xc-service-learning
           predicates:
@@ -34,6 +34,8 @@ spring:
             - Path=/api/ucenter/**
           filters:
             - StripPrefix=1
+
+
         - id: xc-service-ucenter-auth
           uri: lb://xc-service-ucenter-auth
           predicates:

@@ -1,12 +1,13 @@
 package com.xuecheng.manage_course.controller;
 
 import com.xuecheng.api.course.CourseControllerApi;
-import com.xuecheng.framework.domain.course.*;
+import com.xuecheng.framework.domain.course.CourseBase;
+import com.xuecheng.framework.domain.course.CourseMarket;
+import com.xuecheng.framework.domain.course.Teachplan;
+import com.xuecheng.framework.domain.course.TeachplanMedia;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
-import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
-import com.xuecheng.framework.domain.course.response.CoursePublishResult;
 import com.xuecheng.framework.domain.ucenter.ext.XcUserExt;
 import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
@@ -25,7 +26,6 @@ import java.util.Map;
  * @version 1.0
  **/
 @RestController
-@RequestMapping("/course")
 public class CourseController extends BaseController implements CourseControllerApi {
 
     @Autowired
@@ -62,8 +62,8 @@ public class CourseController extends BaseController implements CourseController
      */
     @Override
     @GetMapping("/coursebase/{course_id}")
-    public CourseBase getCourseBaseById(@PathVariable("course_id") String courseId) {
-        return courseService.getCourseBase(courseId);
+    public ResponseResult getCourseBaseById(@PathVariable("course_id") String courseId) {
+        return ResponseResult.SUCCESS(courseService.getCourseBase(courseId));
     }
 
     /**
@@ -87,8 +87,8 @@ public class CourseController extends BaseController implements CourseController
      */
     @Override
     @GetMapping("/coursemarket/{course_id}")
-    public CourseMarket getCourseMarketById(@PathVariable("course_id") String courseMarketId) {
-        return courseService.getCourseMarketById(courseMarketId);
+    public ResponseResult getCourseMarketById(@PathVariable("course_id") String courseMarketId) {
+        return ResponseResult.SUCCESS(courseService.getCourseMarketById(courseMarketId));
     }
 
     /**
@@ -132,8 +132,8 @@ public class CourseController extends BaseController implements CourseController
     //@PreAuthorize("hasAuthority('course_pic_list')")
     @Override
     @GetMapping("/coursepic/list/{courseId}")
-    public CoursePic findCoursePic(@PathVariable("courseId") String courseId) {
-        return courseService.findCoursePic(courseId);
+    public ResponseResult findCoursePic(@PathVariable("courseId") String courseId) {
+        return ResponseResult.SUCCESS(courseService.findCoursePic(courseId));
     }
 
     @Override
@@ -144,37 +144,37 @@ public class CourseController extends BaseController implements CourseController
 
     @Override
     @GetMapping(value = "/courseview/{id}", produces = {"application/json;charset=UTF-8"})
-    public CourseView courseview(@PathVariable("id") String id) {
-        return courseService.getCoruseView(id);
+    public ResponseResult courseview(@PathVariable("id") String id) {
+        return ResponseResult.SUCCESS(courseService.getCoruseView(id));
     }
 
     @Override
     @PostMapping("/preview/{id}")
-    public CoursePublishResult preview(@PathVariable("id") String id) {
+    public ResponseResult preview(@PathVariable("id") String id) {
         return courseService.preview(id);
     }
 
     @Override
     @PostMapping("/publish/{id}")
-    public CoursePublishResult publish(@PathVariable("id") String id) {
-        return courseService.publish(id);
+    public ResponseResult publish(@PathVariable("id") String id) {
+        return ResponseResult.SUCCESS(courseService.publish(id));
     }
 
     @Override
     @PostMapping("/savemedia")
     public ResponseResult savemedia(@RequestBody TeachplanMedia teachplanMedia) {
-        return courseService.savemedia(teachplanMedia);
+        return ResponseResult.SUCCESS(courseService.savemedia(teachplanMedia));
     }
 
     @Override
     @GetMapping("/courseview/list/{ids}")
-    public Map<String, CourseBase> getCourseBaseList(@PathVariable("ids") String[] ids) {
+    public ResponseResult getCourseBaseList(@PathVariable("ids") String[] ids) {
         Map<String, CourseBase> map = new HashMap<>();
         for (String id : ids) {
             CourseBase courseBaseById = courseService.findCourseBaseById(id);
             map.put(id, courseBaseById);
         }
-        return map;
+        return ResponseResult.SUCCESS(map);
     }
 
     @Override

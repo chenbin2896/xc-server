@@ -21,8 +21,3 @@ spring:
       max-file-size: 1MB
       # 最大支持请求大小
       max-request-size: 30MB
-qiniu:
-  oss:
-    accessKey: BzQhlS-Gz5bLVU-VvJT6PWJlXwlXM9F1Fzu_FlCv
-    secretKey: 01jxpCl4dC3dFKcIzUOz_3pSJ7T7Lu9C5b_QIpEb
-    bucket: axbt

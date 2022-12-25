@@ -1,7 +1,6 @@
 package com.xuecheng.framework.exception;
 
 import com.google.common.collect.ImmutableMap;
-import com.xuecheng.framework.model.response.CommonCode;
 import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.framework.model.response.ResultCode;
 import org.slf4j.Logger;
@@ -32,21 +31,21 @@ public class ExceptionCatch {
         return responseResult;
     }
 
-    @ExceptionHandler(Exception.class)
-    @ResponseBody
-    public ResponseResult exception(Exception e) {
-        log.error("catch exception:{}exception", e.getMessage());
-        if (EXCEPTIONS == null) {
-            EXCEPTIONS = builder.build();
-        }
-        final ResultCode resultCode = EXCEPTIONS.get(e.getClass());
-        final ResponseResult responseResult;
-        if (resultCode != null) {
-            responseResult = new ResponseResult(resultCode);
-        } else {
-            responseResult = new ResponseResult(CommonCode.SERVER_ERROR);
-        }
-        return responseResult;
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseBody
+//    public ResponseResult exception(Exception e) {
+//        log.error("catch exception:{}exception", e.getMessage());
+//        if (EXCEPTIONS == null) {
+//            EXCEPTIONS = builder.build();
+//        }
+//        final ResultCode resultCode = EXCEPTIONS.get(e.getClass());
+//        final ResponseResult responseResult;
+//        if (resultCode != null) {
+//            responseResult = new ResponseResult(resultCode);
+//        } else {
+//            responseResult = new ResponseResult(CommonCode.SERVER_ERROR);
+//        }
+//        return responseResult;
+//    }
 
 }

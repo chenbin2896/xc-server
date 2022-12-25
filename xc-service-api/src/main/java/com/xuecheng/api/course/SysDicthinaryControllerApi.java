@@ -1,6 +1,7 @@
 package com.xuecheng.api.course;
 
 import com.xuecheng.framework.domain.system.SysDictionary;
+import com.xuecheng.framework.model.response.ResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -12,6 +13,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface SysDicthinaryControllerApi {
 
     @Operation(summary = "数据字典查询接口")
-    public SysDictionary getByType(String type);
+    public ResponseResult getByType(String type);
 
 }

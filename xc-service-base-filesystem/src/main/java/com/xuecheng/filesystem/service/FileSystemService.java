@@ -1,12 +1,8 @@
 package com.xuecheng.filesystem.service;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.qiniu.common.QiniuException;
-import com.qiniu.http.Response;
-import com.qiniu.storage.UploadManager;
-import com.xuecheng.filesystem.config.QiNiuConfig;
 import com.xuecheng.filesystem.dao.FileSystemRepository;
+import com.xuecheng.filesystem.minio.MiniClient;
 import com.xuecheng.framework.domain.filesystem.FileSystem;
 import com.xuecheng.framework.domain.filesystem.response.FileSystemCode;
 import com.xuecheng.framework.domain.filesystem.response.UploadFileResult;
@@ -27,34 +23,27 @@ import java.util.Map;
 @Service
 public class FileSystemService {
 
-
     @Autowired
     FileSystemRepository fileSystemRepository;
 
-    @Autowired
-    private UploadManager uploadManager;
-
-    @Autowired
-    private QiNiuConfig qiNiuConfig;
 
     public UploadFileResult upload(MultipartFile multipartFile,
-                                          String filetag,
-                                          String businesskey,
-                                          String metadata) throws IOException {
+                                   String filetag,
+                                   String businesskey,
+                                   String metadata) throws IOException {
         if (multipartFile == null) {
             ExceptionCast.cast(FileSystemCode.FS_UPLOADFILE_FILEISNULL);
         }
+        String key = MiniClient.generateKeyWithUUIDName("video", multipartFile.getOriginalFilename());
 
-        byte[] bytes = multipartFile.getBytes();
-        String fileId = uploadByQiNiu(bytes);
+        MiniClient.upload(
+                key,
+                multipartFile.getInputStream(),
+                multipartFile.getContentType());
 
-        if (StringUtils.isEmpty(fileId)) {
-            ExceptionCast.cast(FileSystemCode.FS_UPLOADFILE_SERVERFAIL);
-        }
         //第二步：将文件id及其它文件信息存储到mongodb中。
         FileSystem fileSystem = new FileSystem();
-//        fileSystem.setFileId(fileId);
-        fileSystem.setFilePath(fileId);
+        fileSystem.setFilePath(key);
         fileSystem.setFiletag(filetag);
         fileSystem.setFileSize(multipartFile.getSize());
         fileSystem.setBusinesskey(businesskey);
@@ -72,13 +61,4 @@ public class FileSystemService {
         return new UploadFileResult(CommonCode.SUCCESS, fileSystem);
     }
 
-    private String uploadByQiNiu(byte[] bytes) throws QiniuException {
-
-        Response response = uploadManager.put(bytes, System.currentTimeMillis()+"", qiNiuConfig.getToken());
-        String info = response.bodyString();
-        JSONObject jsonObject = JSON.parseObject(info);
-
-        return jsonObject.getString("key");
-
-    }
 }

@@ -16,10 +16,10 @@
         course_base
         <where>
             <if test="companyId != null and companyId !=''">
-                course_base.company_id = ${companyId}
+                and course_base.company_id = ${companyId}
             </if>
             <if test="userId != null and userId !=''">
-                course_base.user_id = ${useId}
+                and course_base.user_id = ${userId}
             </if>
         </where>
 

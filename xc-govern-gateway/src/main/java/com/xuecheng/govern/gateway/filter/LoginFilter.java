@@ -105,7 +105,7 @@ public class LoginFilter implements GlobalFilter, Ordered {
     public static void main(String[] args) {
 
 
-        String encode = AesUtil.encode("123123");
+        String encode = AesUtil.encode("49");
 
         System.out.println(encode);
     }
