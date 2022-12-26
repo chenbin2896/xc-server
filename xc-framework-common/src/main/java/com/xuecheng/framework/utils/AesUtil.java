@@ -21,7 +21,7 @@ public class AesUtil {
 
             byte[] decrypt = aes.decrypt(Base64Utils.decodeFromString(userId));
             return new String(decrypt);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("解析token失败{}", e.getMessage());
             return null;
         }

@@ -11,5 +11,5 @@ import lombok.ToString;
 @Data
 @ToString
 public class LearningCourseRequest {
-    private String uid;
+
 }

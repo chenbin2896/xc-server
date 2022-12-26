@@ -12,10 +12,10 @@ import org.springframework.context.annotation.ComponentScan;
  * @create 2018-07-12 8:57
  **/
 @SpringBootApplication
-@EntityScan("com.xuecheng.framework.domain.media")//扫描实体类
-@ComponentScan(basePackages = {"com.xuecheng.api"})//扫描接口
+@EntityScan("com.xuecheng.framework.domain.media")
+@ComponentScan(basePackages = {"com.xuecheng.api"})
 @ComponentScan(basePackages = {"com.xuecheng.manage.media.processor"})//扫描本项目下的所有类
-@ComponentScan(basePackages = {"com.xuecheng.framework"})//扫描common下的所有类
+@ComponentScan(basePackages = {"com.xuecheng.framework"})
 public class ManageMediaProcessorApplication {
     public static void main(String[] args) {
         SpringApplication.run(ManageMediaProcessorApplication.class, args);

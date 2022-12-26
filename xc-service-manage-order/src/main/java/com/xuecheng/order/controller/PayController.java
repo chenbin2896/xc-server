@@ -8,8 +8,9 @@ import com.xuecheng.order.config.AlipayConfig;
 import com.xuecheng.order.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletOutputStream;
 import java.io.UnsupportedEncodingException;
@@ -29,7 +30,7 @@ public class PayController extends BaseController {
     @Autowired
     OrderService orderService;
 
-    @RequestMapping(value = "/zhifubao", method = RequestMethod.POST)
+    @PostMapping(value = "/zhifubao")
     public void pay() {
         try {
             //获得初始化的AlipayClient
@@ -70,7 +71,7 @@ public class PayController extends BaseController {
     /**
      * 支付成功异步通知
      */
-    @RequestMapping(value = "/notify", method = RequestMethod.POST)
+    @PostMapping(value = "/notify")
     public boolean payNotify() {
         //获取支付宝POST过来反馈信息
         Map<String, String> params = new HashMap<String, String>();
@@ -147,7 +148,7 @@ public class PayController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/returnUrl", method = RequestMethod.GET)
+    @GetMapping(value = "/returnUrl")
     public String returnUrl() {
         return "redirect:http://ucenter.xuecheng.com/#/order";
     }

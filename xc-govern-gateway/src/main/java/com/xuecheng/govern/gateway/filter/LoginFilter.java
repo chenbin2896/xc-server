@@ -43,6 +43,14 @@ public class LoginFilter implements GlobalFilter, Ordered {
     @Autowired
     WhiteList whiteList;
 
+    public static void main(String[] args) {
+
+
+        String encode = AesUtil.encode("49");
+
+        System.out.println(encode);
+    }
+
     //拒绝访问
     private Mono<Void> accessDenied(ServerWebExchange exchange) {
         //得到response
@@ -60,7 +68,6 @@ public class LoginFilter implements GlobalFilter, Ordered {
 
         return response.writeWith(Mono.just(dataBuffer));
     }
-
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -100,13 +107,5 @@ public class LoginFilter implements GlobalFilter, Ordered {
     public int getOrder() {
 
         return 0;
-    }
-
-    public static void main(String[] args) {
-
-
-        String encode = AesUtil.encode("49");
-
-        System.out.println(encode);
     }
 }

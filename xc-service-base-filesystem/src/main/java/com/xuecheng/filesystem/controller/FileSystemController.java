@@ -7,7 +7,6 @@ import com.xuecheng.framework.exception.CustomException;
 import com.xuecheng.framework.model.response.CommonCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,8 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
  * @version 1.0
  **/
 @RestController
-@RequestMapping("/filesystem")
 public class FileSystemController implements FileSystemControllerApi {
+
     @Autowired
     FileSystemService fileSystemService;
 

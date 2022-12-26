@@ -7,9 +7,8 @@ import com.xuecheng.framework.domain.cms.CmsPage;
 import com.xuecheng.framework.domain.cms.CmsSite;
 import com.xuecheng.manage_cms_client.dao.CmsPageRepository;
 import com.xuecheng.manage_cms_client.dao.CmsSiteRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -17,7 +16,6 @@ import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,10 +25,9 @@ import java.util.Optional;
  * @author Administrator
  * @version 1.0
  **/
+@Slf4j
 @Service
 public class PageService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PageService.class);
 
     @Autowired
     GridFsTemplate gridFsTemplate;
@@ -54,7 +51,7 @@ public class PageService {
         //从gridFS中查询html文件
         InputStream inputStream = this.getFileById(htmlFileId);
         if (inputStream == null) {
-            LOGGER.error("getFileById InputStream is null ,htmlFileId:{}", htmlFileId);
+            log.error("getFileById InputStream is null ,htmlFileId:{}", htmlFileId);
             return;
         }
         //得到站点id
@@ -63,13 +60,12 @@ public class PageService {
         CmsSite cmsSite = this.findCmsSiteById(siteId);
         //得到站点的物理路径
         String siteWebPath = cmsSite.getSiteWebPath();
-        System.out.println("得到物理路径：" + siteWebPath);
         //得到页面的物理路径
         String pagePath = siteWebPath + cmsPage.getPagePhysicalPath() + cmsPage.getPageName();
         //将html文件保存到服务器物理路径上
         FileOutputStream fileOutputStream = null;
         try {
-            fileOutputStream = new FileOutputStream(new File(pagePath));
+            fileOutputStream = new FileOutputStream(pagePath);
             IOUtils.copy(inputStream, fileOutputStream);
         } catch (Exception e) {
             e.printStackTrace();
@@ -86,8 +82,6 @@ public class PageService {
                 e.printStackTrace();
             }
         }
-
-
     }
 
     //根据文件id从GridFS中查询文件内容
@@ -102,18 +96,16 @@ public class PageService {
         try {
             return gridFsResource.getInputStream();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("获取文件异常：{}", e.getMessage());
         }
         return null;
     }
 
-    //根据页面id查询页面信息
     private CmsPage findCmsPageById(String pageId) {
         Optional<CmsPage> optional = cmsPageRepository.findById(pageId);
         return optional.orElse(null);
     }
 
-    //根据站点id查询站点信息
     private CmsSite findCmsSiteById(String siteId) {
         Optional<CmsSite> optional = cmsSiteRepository.findById(siteId);
         return optional.orElse(null);

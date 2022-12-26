@@ -1,10 +1,12 @@
 package com.xuecheng.ucenter.controller;
 
 import com.xuecheng.api.ucenter.UcenterControllerApi;
-import com.xuecheng.framework.domain.ucenter.ext.XcUserExt;
+import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.ucenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author Administrator
@@ -17,13 +19,13 @@ public class UcenterController implements UcenterControllerApi {
 
     @Override
     @GetMapping("/getuserext")
-    public XcUserExt getUserext(@RequestParam("username") String username) {
-        return userService.getUserExt(username);
+    public ResponseResult getUserext(@RequestParam("username") String username) {
+        return ResponseResult.SUCCESS(userService.getUserExt(username));
     }
 
     @Override
     @GetMapping("/getUserById")
-    public XcUserExt getUserById(@RequestParam("uid") String userId) {
-        return userService.getUserById(userId);
+    public ResponseResult getUserById(@RequestParam("uid") String userId) {
+        return ResponseResult.SUCCESS(userService.getUserById(userId));
     }
 }

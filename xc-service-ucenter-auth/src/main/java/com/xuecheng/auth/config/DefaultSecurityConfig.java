@@ -47,16 +47,16 @@ public class DefaultSecurityConfig {
         http
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .mvcMatchers("/assets/**", "/webjars/**", "/login", "/oauth2/consent","/test").permitAll()
+                                .mvcMatchers("/assets/**", "/webjars/**", "/login", "/oauth2/consent", "/test").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .cors(c -> corsConfigurationSource())
                 .csrf()
                 .disable()
-                .formLogin(login->
+                .formLogin(login ->
                         login
                                 .successHandler(new FederatedIdentityAuthenticationSuccessHandler()))
-                .logout(logout->logout.logoutSuccessHandler(new MyLogoutSuccessHandler()))
+                .logout(logout -> logout.logoutSuccessHandler(new MyLogoutSuccessHandler()))
                 .apply(federatedIdentityConfigurer);
         return http.build();
     }
@@ -89,7 +89,7 @@ public class DefaultSecurityConfig {
     // @formatter:on
 
     @Bean
-    public PasswordEncoder passwordEncoder () {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
 //        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }

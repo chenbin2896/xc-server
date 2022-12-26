@@ -50,8 +50,7 @@ public class TaskService {
         Pageable pageable = PageRequest.of(0, size);
         //查询前n条任务
         Page<XcTask> all = xcTaskRepository.findByUpdateTimeBefore(pageable, updateTime);
-        List<XcTask> list = all.getContent();
-        return list;
+        return all.getContent();
     }
 
     //发布消息
@@ -71,8 +70,7 @@ public class TaskService {
     @Transactional
     public int getTask(String id, int version) {
         //通过乐观锁的方式来更新数据表，如果结果大于0说明取到任务
-        int count = xcTaskRepository.updateTaskVersion(id, version);
-        return count;
+        return xcTaskRepository.updateTaskVersion(id, version);
     }
 
     //完成任务

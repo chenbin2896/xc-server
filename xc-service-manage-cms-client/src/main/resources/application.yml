@@ -2,10 +2,10 @@ server:
   port: 30000
 spring:
   application:
-    name: xc‐service‐manage‐cms‐client
+    name: xc-service-manage-cms-client
   data:
     mongodb:
-      uri: mongodb://localhost:27017
+      uri: mongodb://docker-base:27017
       database: xc_cms
   rabbitmq:
     host: docker-base

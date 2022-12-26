@@ -15,11 +15,11 @@ import java.util.Date;
 @ToString
 @Entity
 @Table(name = "xc_learning_course")
-@GenericGenerator(name = "jpa-uuid", strategy = "uuid")
+@GenericGenerator(name = "snowflake", strategy = "com.xuecheng.framework.utils.IdGenerator")
 public class XcLearningCourse implements Serializable {
     private static final long serialVersionUID = -916357210051789799L;
     @Id
-    @GeneratedValue(generator = "jpa-uuid")
+    @GeneratedValue(generator = "snowflake", strategy = GenerationType.SEQUENCE)
     @Column(length = 32)
     private String id;
     @Column(name = "course_id")

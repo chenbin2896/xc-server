@@ -1,7 +1,6 @@
 package com.xuecheng.order.client;
 
-import com.xuecheng.framework.domain.course.CourseBase;
-import com.xuecheng.framework.domain.course.ext.CourseView;
+import com.xuecheng.framework.model.response.ResponseResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface CourseBaseClient {
     //查询课程详情
     @GetMapping("/coursebase/{course_id}")
-    public CourseBase getCourseBaseById(@PathVariable("course_id") String courseId);
+    public ResponseResult getCourseBaseById(@PathVariable("course_id") String courseId);
 
 
     @GetMapping(value = "/courseview/{id}", produces = {"application/json;charset=UTF-8"})
-    public CourseView courseview(@PathVariable("id") String id);
+    public ResponseResult courseview(@PathVariable("id") String id);
 
 }

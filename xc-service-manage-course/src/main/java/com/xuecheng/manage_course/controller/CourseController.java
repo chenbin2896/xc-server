@@ -5,11 +5,9 @@ import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.TeachplanMedia;
-import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.TeachplanNode;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
 import com.xuecheng.framework.domain.ucenter.ext.XcUserExt;
-import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.framework.web.BaseController;
 import com.xuecheng.manage_course.client.CmsPageClient;
@@ -46,9 +44,9 @@ public class CourseController extends BaseController implements CourseController
     @Override
     @PostMapping("/coursebase/add")
     public ResponseResult addCourseBase(@RequestAttribute String userId, @RequestBody CourseBase courseBase) {
-        XcUserExt user = userServiceClient.getUserById(userId);
-
-        courseBase.setCompanyId(user.getCompanyId());
+        ResponseResult result = userServiceClient.getUserById(userId);
+        XcUserExt userExt = (XcUserExt) result.getData();
+        courseBase.setCompanyId(userExt.getCompanyId());
         courseBase.setUserId(userId);
 
         return courseService.add(courseBase);
@@ -104,7 +102,6 @@ public class CourseController extends BaseController implements CourseController
         return courseService.updateCourseMarket(courseMarketId, courseMarket);
     }
 
-    //当用户拥有course_teachplan_list权限时候方可访问此方法
     //@PreAuthorize("hasAuthority('course_teachplan_list')")
     @Override
     @GetMapping("/teachplan/list/{courseId}")
@@ -179,14 +176,14 @@ public class CourseController extends BaseController implements CourseController
 
     @Override
     @PostMapping("/courseinfo/list/{page}/{size}")
-    public QueryResponseResult<CourseInfo> findCourseList(@RequestAttribute String userId,
-                                                          @PathVariable("page") int page,
-                                                          @PathVariable("size") int size,
-                                                          @RequestBody CourseListRequest courseListRequest) {
+    public ResponseResult findCourseList(@RequestAttribute String userId,
+                                         @PathVariable("page") int page,
+                                         @PathVariable("size") int size,
+                                         @RequestBody CourseListRequest courseListRequest) {
 
-        XcUserExt user = userServiceClient.getUserById(userId);
+        ResponseResult result = userServiceClient.getUserById(userId);
+        XcUserExt user = (XcUserExt) result.getData();
 
-
-        return courseService.findCourseList(user.getCompanyId(), userId, page, size, courseListRequest);
+        return ResponseResult.SUCCESS(courseService.findCourseList(user.getCompanyId(), userId, page, size, courseListRequest));
     }
 }

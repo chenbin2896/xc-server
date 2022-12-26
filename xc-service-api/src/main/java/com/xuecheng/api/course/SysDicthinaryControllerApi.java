@@ -1,6 +1,5 @@
 package com.xuecheng.api.course;
 
-import com.xuecheng.framework.domain.system.SysDictionary;
 import com.xuecheng.framework.model.response.ResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -3,7 +3,9 @@ package com.xuecheng.order.service;
 import com.xuecheng.framework.domain.order.XcOrders;
 import com.xuecheng.framework.domain.order.XcOrdersDetail;
 import com.xuecheng.framework.domain.order.XcOrdersPay;
-import com.xuecheng.framework.model.response.*;
+import com.xuecheng.framework.model.response.CommonCode;
+import com.xuecheng.framework.model.response.QueryResult;
+import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.order.client.LearningCourseClient;
 import com.xuecheng.order.dao.XcOrderDetailRepository;
 import com.xuecheng.order.dao.XcOrderPayRepository;
@@ -45,25 +47,11 @@ public class OrderService {
         Example<XcOrders> xcOrdersExample = Example.of(xcOrders1);
         List<XcOrders> all = xcOrderRepository.findAll(xcOrdersExample);
         if (!CollectionUtils.isEmpty(all)) {
-            return new ResponseResult(new ResultCode() {
-                @Override
-                public boolean success() {
-                    return false;
-                }
+            return ResponseResult.FAIL("您有未完成的订单，请完成后进行创建订单");
 
-                @Override
-                public int code() {
-                    return 1;
-                }
-
-                @Override
-                public String message() {
-                    return "您有未完成的订单，请完成后进行创建订单";
-                }
-            });
         }
         xcOrderRepository.save(xcOrders);
-        return new ResponseResult("操作成功", xcOrders);
+        return ResponseResult.SUCCESS(xcOrders);
     }
 
     public ResponseResult batchSaveXcOrderDetail(List<XcOrdersDetail> xcOrdersDetails) {
@@ -74,7 +62,7 @@ public class OrderService {
         return new ResponseResult(CommonCode.FAIL);
     }
 
-    public QueryResponseResult<XcOrders> list(int page, int size, XcOrders xcOrders) {
+    public QueryResult<XcOrders> list(int page, int size, XcOrders xcOrders) {
         ExampleMatcher exampleMatcher = ExampleMatcher.matching();
         Example<XcOrders> example = Example.of(xcOrders, exampleMatcher);
 
@@ -94,16 +82,16 @@ public class OrderService {
 
         queryResult.setTotal(all.getTotalElements());
         queryResult.setList(xcOrdersList);
-        return new QueryResponseResult<>(CommonCode.SUCCESS, queryResult);
+        return queryResult;
     }
 
-    public ResponseResult<XcOrders> get(String orderNum) {
+    public XcOrders get(String orderNum) {
         Optional<XcOrders> optional = xcOrderRepository.findById(orderNum);
-        return optional.map(xcOrders -> new ResponseResult<>("操作成功", xcOrders)).orElseGet(() -> new ResponseResult<>(CommonCode.FAIL));
+        return optional.orElse(null);
     }
 
     @Transactional
-    public boolean updateOrderPayStatus(String orderNum, String payNum) {
+    public void updateOrderPayStatus(String orderNum, String payNum) {
         XcOrdersPay xcOrdersPay = new XcOrdersPay();
         xcOrdersPay.setOrderNumber(orderNum);
         Example<XcOrdersPay> example = Example.of(xcOrdersPay);
@@ -130,9 +118,7 @@ public class OrderService {
         //添加课程
         if (!courseId.equals("")) {
             learningCourseClient.addopencourse(courseId);
-            return true;
         }
 
-        return false;
     }
 }

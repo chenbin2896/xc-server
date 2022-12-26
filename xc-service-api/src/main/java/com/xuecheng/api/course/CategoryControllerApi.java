@@ -1,7 +1,6 @@
 package com.xuecheng.api.course;
 
-import com.xuecheng.framework.domain.course.ext.CategoryNode;
-import com.xuecheng.framework.model.response.QueryResponseResult;
+import com.xuecheng.framework.model.response.ResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -13,5 +12,5 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface CategoryControllerApi {
 
     @Operation(summary = "查询分类")
-    public QueryResponseResult<CategoryNode> findList();
+    public ResponseResult findList();
 }

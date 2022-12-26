@@ -14,7 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "订单管理", description = "订单管理")
 public interface XcOrderControllerApi {
     @Operation(summary = "创建订单")
-    ResponseResult createOrder(CreateOrderRequest createOrderRequest);
+    ResponseResult createOrder(String userId, CreateOrderRequest createOrderRequest);
 
     @Operation(summary = "订单列表")
     ResponseResult list(int page, int size, XcOrders xcOrders);

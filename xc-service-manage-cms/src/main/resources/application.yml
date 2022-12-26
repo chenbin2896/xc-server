@@ -1,5 +1,7 @@
 server:
   port: ${PORT:31001}
+  servlet:
+    context-path: /cms
 spring:
   application:
     name: xc-service-manage-cms

@@ -34,6 +34,12 @@ public class ResponseResult implements Response {
         this.data = data;
     }
 
+    public ResponseResult(ResultCode resultCode, String message) {
+        this.success = resultCode.success();
+        this.code = resultCode.code();
+        this.message = message;
+    }
+
     public ResponseResult(String message, Object data) {
         this.data = data;
         this.success = true;
@@ -45,13 +51,17 @@ public class ResponseResult implements Response {
         return new ResponseResult(CommonCode.SUCCESS);
     }
 
+    public static ResponseResult SUCCESS(Object data) {
+        return new ResponseResult(CommonCode.SUCCESS, data);
+    }
+
     public static ResponseResult FAIL() {
         return new ResponseResult(CommonCode.FAIL);
     }
 
-
-    public static ResponseResult SUCCESS (Object data) {
-        return new ResponseResult(CommonCode.SUCCESS, data);
+    public static ResponseResult FAIL(String message) {
+        return new ResponseResult(CommonCode.FAIL, message);
     }
+
 
 }

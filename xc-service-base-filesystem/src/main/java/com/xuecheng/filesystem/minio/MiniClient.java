@@ -2,7 +2,7 @@ package com.xuecheng.filesystem.minio;
 
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
-import org.springframework.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.InputStream;
 import java.time.LocalDateTime;

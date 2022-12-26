@@ -11,7 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
 
 
     @Bean
-    public ParamsInterceptor paramsInterceptor () {
+    public ParamsInterceptor paramsInterceptor() {
         return new ParamsInterceptor();
     }
 

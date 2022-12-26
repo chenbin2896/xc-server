@@ -17,6 +17,6 @@ public interface CourseMapper {
     CourseBase findCourseBaseById(String id);
 
     Page<CourseInfo> findCourseListPage(@Param("companyId") String companyId
-                                        , @Param("userId") String userId,
+            , @Param("userId") String userId,
                                         @Param("request") CourseListRequest courseListRequest);
 }

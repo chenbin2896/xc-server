@@ -4,15 +4,10 @@ import com.xuecheng.framework.domain.course.CourseBase;
 import com.xuecheng.framework.domain.course.CourseMarket;
 import com.xuecheng.framework.domain.course.Teachplan;
 import com.xuecheng.framework.domain.course.TeachplanMedia;
-import com.xuecheng.framework.domain.course.ext.CourseInfo;
-import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.course.request.CourseListRequest;
-import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
-import java.util.Map;
 
 /**
  * Created by Administrator.
@@ -27,7 +22,7 @@ public interface CourseControllerApi {
     public ResponseResult addTeachplan(Teachplan teachplan);
 
     @Operation(summary = "查询我的课程列表")
-    public QueryResponseResult<CourseInfo> findCourseList(String userId, int page, int size, CourseListRequest courseListRequest);
+    public ResponseResult findCourseList(String userId, int page, int size, CourseListRequest courseListRequest);
 
     @Operation(summary = "添加课程")
     public ResponseResult addCourseBase(String userId, CourseBase courseBase);

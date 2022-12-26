@@ -4,6 +4,8 @@ package com.xuecheng.framework.utils;
  * Created by mrt on 2018/3/27.
  */
 
+import org.apache.commons.lang3.RandomUtils;
+
 /**
  * Twitter_Snowflake<br>
  * SnowFlake的结构如下(每部分用-分开):<br>
@@ -108,19 +110,13 @@ public class SnowflakeIdWorker {
         this.datacenterId = datacenterId;
     }
 
-    // ==============================Methods==========================================
+    private SnowflakeIdWorker() {
+        this.workerId = RandomUtils.nextInt(1, 9);
+        this.datacenterId = RandomUtils.nextInt(1, 9);
+    }
 
-    /**
-     * 测试
-     */
-    public static void main(String[] args) {
-//        System.out.println(Long.toBinaryString(5));
-        SnowflakeIdWorker idWorker = new SnowflakeIdWorker(1, 1);
-        for (int i = 0; i < 1000; i++) {
-            long id = idWorker.nextId();
-            System.out.println(Long.toBinaryString(id));
-            System.out.println(id);
-        }
+    public static SnowflakeIdWorker getInstance() {
+        return SnowFlakeIdCreateHolder.INSTANCE;
     }
 
     /**
@@ -175,8 +171,6 @@ public class SnowflakeIdWorker {
         return timestamp;
     }
 
-    //==============================Test=============================================
-
     /**
      * 返回以毫秒为单位的当前时间
      *
@@ -184,5 +178,12 @@ public class SnowflakeIdWorker {
      */
     protected long timeGen() {
         return System.currentTimeMillis();
+    }
+
+    //==============================Test=============================================
+
+    // ==============================Methods==========================================
+    private static class SnowFlakeIdCreateHolder {
+        private static final SnowflakeIdWorker INSTANCE = new SnowflakeIdWorker();
     }
 }

@@ -17,6 +17,7 @@ import lombok.ToString;
 public class MediaCourseResult extends ResponseResult {
     MediaFile mediaVideo;
     MediaVideoCourse mediaVideoCourse;
+
     public MediaCourseResult(ResultCode resultCode, MediaVideoCourse mediaVideoCourse) {
         super(resultCode);
         this.mediaVideoCourse = mediaVideoCourse;

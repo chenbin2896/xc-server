@@ -1,5 +1,7 @@
 server:
   port: 22100
+  servlet:
+    context-path: /filesystem
 spring:
   application:
     name: xc-service-base-filesystem

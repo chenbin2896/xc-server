@@ -2,8 +2,6 @@ package com.xuecheng.manage.media.service;
 
 import com.xuecheng.framework.domain.media.MediaFile;
 import com.xuecheng.framework.domain.media.request.QueryMediaFileRequest;
-import com.xuecheng.framework.model.response.CommonCode;
-import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
 import com.xuecheng.manage.media.dao.MediaFileRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -24,7 +22,7 @@ public class MediaFileService {
     MediaFileRepository mediaFileRepository;
 
     //查询我的媒资列表
-    public QueryResponseResult findList(int page, int size, QueryMediaFileRequest queryMediaFileRequest) {
+    public QueryResult<MediaFile> findList(int page, int size, QueryMediaFileRequest queryMediaFileRequest) {
         if (queryMediaFileRequest == null) {
             queryMediaFileRequest = new QueryMediaFileRequest();
         }
@@ -69,6 +67,6 @@ public class MediaFileService {
         queryResult.setTotal(total);
 
         //返回结果
-        return new QueryResponseResult(CommonCode.SUCCESS, queryResult);
+        return queryResult;
     }
 }

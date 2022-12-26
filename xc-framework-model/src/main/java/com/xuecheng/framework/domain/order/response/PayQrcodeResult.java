@@ -14,6 +14,7 @@ public class PayQrcodeResult extends ResponseResult {
     private String codeUrl;
     private Float money;
     private String orderNumber;
+
     public PayQrcodeResult(ResultCode resultCode) {
         super(resultCode);
     }

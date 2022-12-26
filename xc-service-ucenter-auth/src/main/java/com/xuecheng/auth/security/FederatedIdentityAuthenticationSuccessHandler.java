@@ -18,11 +18,11 @@ package com.xuecheng.auth.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.xuecheng.auth.service.UserJwt;
+import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.framework.utils.AesUtil;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.encrypt.AesBytesEncryptor;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -32,7 +32,6 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
-import org.springframework.util.Base64Utils;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.ServletException;
@@ -40,7 +39,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -54,10 +52,8 @@ import java.util.function.Consumer;
  */
 public class FederatedIdentityAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-    private Log log = LogFactory.getLog(this.getClass());
-
     private final AuthenticationSuccessHandler delegate = new SavedRequestAwareAuthenticationSuccessHandler();
-
+    private Log log = LogFactory.getLog(this.getClass());
     private Consumer<OAuth2User> oauth2UserHandler = (user) -> {
     };
 
@@ -94,32 +90,23 @@ public class FederatedIdentityAuthenticationSuccessHandler extends SimpleUrlAuth
 
         PrintWriter writer = response.getWriter();
 
-        Map<String, Object> map = new HashMap<>();
         Map<String, Object> data = new HashMap<>();
 
-
         UserJwt principal = (UserJwt) authentication.getPrincipal();
-
-        System.out.println(principal);
 
         String encode = AesUtil.encode(principal.getId());
 
         // 返回jwt
         data.put("token", encode);
 
-        map.put("code", 20000);
-        map.put("msg", "登录成功");
-        map.put("data", data);
-
         if (StringUtils.hasText(redirectUrl)) {
             data.put("redirectUrl", redirectUrl);
         }
-        writer.write(new ObjectMapper().writeValueAsString(map));
+        writer.write(new ObjectMapper().writeValueAsString(ResponseResult.SUCCESS(data)));
 
         writer.flush();
         writer.close();
 
-//		this.delegate.onAuthenticationSuccess(request, response, authentication);
     }
 
     public void setOAuth2UserHandler(Consumer<OAuth2User> oauth2UserHandler) {
@@ -129,48 +116,4 @@ public class FederatedIdentityAuthenticationSuccessHandler extends SimpleUrlAuth
     public void setOidcUserHandler(Consumer<OidcUser> oidcUserHandler) {
         this.oidcUserHandler = oidcUserHandler;
     }
-
-
-    public static void main(String[] args) {
-//        Map<String, Object> claim = new HashMap<>();
-//
-//        claim.put("uid", "123");
-//
-//        String token = Jwts.builder()
-//                .setClaims(claim)
-//                .signWith(SignatureAlgorithm.HS512, "sdfasdf").compact();
-//
-//        System.out.println(token);
-//
-//        Claims claims = Jwts.parser().setSigningKey("sdfasdf").parseClaimsJws(token).getBody();
-//        String uid = (String) claims.get("uid");
-//
-//        System.out.println(uid);
-//
-//
-//        String compact = Jwts.builder().setClaims(claim).compact();
-//
-//        Claims sdfasdf = Jwts.parser().setSigningKey("sdfasdf").parseClaimsJwt(compact).getBody();
-//
-//        System.out.println(sdfasdf.get("uid"));
-
-
-        AesBytesEncryptor aes = new AesBytesEncryptor("abc", "5c0744940b5c369b");
-
-        byte[] encrypt = aes.encrypt("1234567890098765".getBytes(StandardCharsets.UTF_8));
-
-        String s1 = Base64Utils.encodeToString(encrypt);
-        System.out.println(s1);
-
-
-
-        byte[] decrypt = aes.decrypt(Base64Utils.decodeFromString(s1));
-
-        String s = new String(decrypt);
-        System.out.println(s);
-
-
-    }
-
-
 }

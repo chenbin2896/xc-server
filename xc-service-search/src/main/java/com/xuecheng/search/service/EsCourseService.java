@@ -55,7 +55,7 @@ public class EsCourseService {
     private String media_source_field;
 
     //课程搜索
-    public QueryResponseResult<CoursePub> list(int page, int size, CourseSearchParam courseSearchParam) {
+    public QueryResult<CoursePub> list(int page, int size, CourseSearchParam courseSearchParam) {
         if (courseSearchParam == null) {
             courseSearchParam = new CourseSearchParam();
         }
@@ -189,7 +189,7 @@ public class EsCourseService {
 
         queryResult.setList(list);
 
-        return new QueryResponseResult<CoursePub>(CommonCode.SUCCESS, queryResult);
+        return queryResult;
     }
 
     //使用ES的客户端向ES请求查询索引信息

@@ -6,10 +6,7 @@ import com.xuecheng.framework.domain.course.ext.CourseView;
 import com.xuecheng.framework.domain.order.XcOrders;
 import com.xuecheng.framework.domain.order.XcOrdersDetail;
 import com.xuecheng.framework.domain.order.request.CreateOrderRequest;
-import com.xuecheng.framework.model.response.CommonCode;
-import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
-import com.xuecheng.framework.utils.XcOauth2Util;
 import com.xuecheng.framework.web.BaseController;
 import com.xuecheng.order.client.CourseBaseClient;
 import com.xuecheng.order.service.OrderService;
@@ -40,7 +37,7 @@ public class OrderController extends BaseController implements XcOrderController
     @Override
     @Transactional
     @PostMapping("/create")
-    public ResponseResult createOrder(@RequestBody CreateOrderRequest createOrderRequest) {
+    public ResponseResult createOrder(@RequestAttribute String userId, @RequestBody CreateOrderRequest createOrderRequest) {
         XcOrders xcOrders = new XcOrders();
 
         Calendar calendar = Calendar.getInstance();
@@ -49,9 +46,9 @@ public class OrderController extends BaseController implements XcOrderController
         xcOrders.setStartTime(new Date());
         xcOrders.setEndTime(calendar.getTime());
         xcOrders.setOrderNumber(String.valueOf(System.currentTimeMillis()));
-        xcOrders.setUserId(getUserId());
-
-        CourseView courseview = courseBaseClient.courseview(createOrderRequest.getCourseId());
+        xcOrders.setUserId(userId);
+        ResponseResult result = courseBaseClient.courseview(createOrderRequest.getCourseId());
+        CourseView courseview = (CourseView) result.getData();
         xcOrders.setInitialPrice(courseview.getCourseMarket().getPrice_old() == null ? courseview.getCourseMarket().getPrice() : courseview.getCourseMarket().getPrice_old());
         xcOrders.setPrice(courseview.getCourseMarket().getPrice());
         xcOrders.setStatus("401001");
@@ -73,29 +70,22 @@ public class OrderController extends BaseController implements XcOrderController
             return responseResult;
         }
         ResponseResult responseResult1 = orderService.batchSaveXcOrderDetail(list);
-        if (responseResult1.isSuccess()) {
+        if (!responseResult1.isSuccess()) {
             return responseResult;
         }
-        return new ResponseResult(CommonCode.FAIL);
+        return ResponseResult.SUCCESS();
     }
 
     @Override
     @PostMapping("/list/{page}/{size}")
-    public QueryResponseResult<XcOrders> list(@PathVariable("page") int page, @PathVariable("size") int size, @RequestBody XcOrders xcOrders) {
-        return orderService.list(page, size, xcOrders);
+    public ResponseResult list(@PathVariable("page") int page, @PathVariable("size") int size, @RequestBody XcOrders xcOrders) {
+        return ResponseResult.SUCCESS(orderService.list(page, size, xcOrders));
     }
 
     @Override
     @GetMapping("/get/{orderNum}")
     public ResponseResult getOrderById(@PathVariable("orderNum") String orderNum) {
-        return orderService.get(orderNum);
+        return ResponseResult.SUCCESS(orderService.get(orderNum));
     }
 
-
-    private String getUserId() {
-        XcOauth2Util xcOauth2Util = new XcOauth2Util();
-        XcOauth2Util.UserJwt userJwt = xcOauth2Util.getUserJwtFromHeader(request);
-        //当前用户所属单位的id
-        return userJwt.getId();
-    }
 }

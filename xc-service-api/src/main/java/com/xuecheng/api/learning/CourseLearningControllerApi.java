@@ -1,9 +1,6 @@
 package com.xuecheng.api.learning;
 
-import com.xuecheng.framework.domain.learning.XcLearningCourse;
 import com.xuecheng.framework.domain.learning.request.LearningCourseRequest;
-import com.xuecheng.framework.domain.learning.respones.GetMediaResult;
-import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -15,13 +12,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface CourseLearningControllerApi {
 
     @Operation(summary = "获取课程学习地址")
-    public GetMediaResult getmedia(String courseId, String teachplanId);
+    public ResponseResult getmedia(String courseId, String teachplanId);
 
     @Operation(summary = "获取课程列表")
-    public QueryResponseResult<XcLearningCourse> getCourseList(int page, int size, LearningCourseRequest learningCourseRequest);
+    public ResponseResult getCourseList(int page, int size, String userId, LearningCourseRequest learningCourseRequest);
 
 
     @Operation(summary = "报名课程")
-    public ResponseResult addopencourse(String courseId);
+    public ResponseResult addopencourse(String userId, String courseId);
 
 }

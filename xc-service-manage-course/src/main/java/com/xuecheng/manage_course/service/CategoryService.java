@@ -2,8 +2,6 @@ package com.xuecheng.manage_course.service;
 
 import com.xuecheng.framework.domain.course.Category;
 import com.xuecheng.framework.domain.course.ext.CategoryNode;
-import com.xuecheng.framework.model.response.CommonCode;
-import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
 import com.xuecheng.manage_course.dao.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +26,7 @@ public class CategoryService {
      *
      * @return
      */
-    public QueryResponseResult<CategoryNode> findCategoryList() {
+    public QueryResult<CategoryNode> findCategoryList() {
         List<Category> categoriesList = categoryRepository.findAllByParentid("1");
         List<CategoryNode> categoryNodes = new ArrayList<>();
         for (Category c : categoriesList) {
@@ -59,7 +57,7 @@ public class CategoryService {
         QueryResult<CategoryNode> queryResult = new QueryResult<>();
         queryResult.setList(categoryNodes);
         queryResult.setTotal(categoryNodes.size());
-        return new QueryResponseResult<>(CommonCode.SUCCESS, queryResult);
+        return queryResult;
 
     }
 }

@@ -1,6 +1,6 @@
 package com.xuecheng.api.cms;
 
-import com.xuecheng.framework.domain.cms.CmsConfig;
+import com.xuecheng.framework.model.response.ResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -13,5 +13,5 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface CmsConfigControllerApi {
 
     @Operation(summary = "根据id查询cms配置信息")
-    CmsConfig getModel(String id);
+    ResponseResult getModel(String id);
 }

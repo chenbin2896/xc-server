@@ -66,21 +66,20 @@ public class MediaProcessTask {
         //创建工具类对象
         Mp4VideoUtil mp4VideoUtil = new Mp4VideoUtil(ffmpeg_path, video_path, mp4_name, mp4folder_path);
         //进行处理
-        String result = mp4VideoUtil.generateMp4();
-        if (result == null || !result.equals("success")) {
+        Boolean result = mp4VideoUtil.generateMp4();
+        if (!result) {
             //处理失败
             mediaFile.setProcessStatus("303003");
             //定义mediaFileProcess_m3u8
             MediaFileProcess_m3u8 mediaFileProcess_m3u8 = new MediaFileProcess_m3u8();
             //记录失败原因
-            mediaFileProcess_m3u8.setErrormsg(result);
+            mediaFileProcess_m3u8.setErrormsg("error");
             mediaFile.setMediaFileProcess_m3u8(mediaFileProcess_m3u8);
             mediaFileRepository.save(mediaFile);
             return;
         }
 
         //4、将mp4生成m3u8和ts文件
-        //String ffmpeg_path, String video_path, String m3u8_name,String m3u8folder_path
         //mp4视频文件路径
         String mp4_video_path = serverPath + mediaFile.getFilePath() + mp4_name;
         //m3u8_name文件名称
@@ -96,7 +95,7 @@ public class MediaProcessTask {
             //定义mediaFileProcess_m3u8
             MediaFileProcess_m3u8 mediaFileProcess_m3u8 = new MediaFileProcess_m3u8();
             //记录失败原因
-            mediaFileProcess_m3u8.setErrormsg(result);
+            mediaFileProcess_m3u8.setErrormsg(tsResult);
             mediaFile.setMediaFileProcess_m3u8(mediaFileProcess_m3u8);
             mediaFileRepository.save(mediaFile);
             return;

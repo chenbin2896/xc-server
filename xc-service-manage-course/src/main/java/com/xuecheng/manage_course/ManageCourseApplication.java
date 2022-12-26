@@ -15,10 +15,10 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients
-@EntityScan("com.xuecheng.framework.domain.course")//扫描实体类
-@ComponentScan(basePackages = {"com.xuecheng.api"})//扫描接口
+@EntityScan("com.xuecheng.framework.domain.course")
+@ComponentScan(basePackages = {"com.xuecheng.api"})
 @ComponentScan(basePackages = {"com.xuecheng.manage_course"})
-@ComponentScan(basePackages = {"com.xuecheng.framework"})//扫描common下的所有类
+@ComponentScan(basePackages = {"com.xuecheng.framework"})
 public class ManageCourseApplication {
     public static void main(String[] args) {
         SpringApplication.run(ManageCourseApplication.class, args);

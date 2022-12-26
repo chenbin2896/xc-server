@@ -45,15 +45,15 @@ public class LoginController {
             redirectUrl = savedRequest.getRedirectUrl();
         }
 
-		System.out.println(redirectUrl);
+        System.out.println(redirectUrl);
 
 //        return "login";
-		return "redirect:http://www.test.com";
+        return "redirect:http://www.test.com";
     }
 
     @GetMapping("/test")
     @ResponseBody
-    public String test () {
+    public String test() {
         return "hello";
     }
 

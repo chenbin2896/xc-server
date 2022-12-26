@@ -23,19 +23,21 @@ spring:
         - id: xc-service-learning
           uri: lb://xc-service-learning
           predicates:
-            - Path=/learning/**
+            - Path=/api/learning/**
+          filters:
+            - StripPrefix=1
         - id: xc-service-manage-cms
           uri: lb://xc-service-manage-cms
           predicates:
-            - Path=/cms/**,/sys/**
+            - Path=/api/cms/**,/api/sys/**
+          filters:
+            - StripPrefix=1
         - id: xc-service-ucenter
           uri: lb://xc-service-ucenter
           predicates:
             - Path=/api/ucenter/**
           filters:
             - StripPrefix=1
-
-
         - id: xc-service-ucenter-auth
           uri: lb://xc-service-ucenter-auth
           predicates:
@@ -43,10 +45,11 @@ spring:
           filters:
             - StripPrefix=1
 
-
         - id: xc-service-order
           uri: lb://xc-service-order
           predicates:
-            - Path=/order/**
+            - Path=/api/order/**
+          filters:
+            - StripPrefix=1
 
 

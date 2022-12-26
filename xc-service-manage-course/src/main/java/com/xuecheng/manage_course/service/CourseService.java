@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.xuecheng.framework.domain.cms.CmsPage;
-import com.xuecheng.framework.domain.cms.response.CmsPageResult;
-import com.xuecheng.framework.domain.cms.response.CmsPostPageResult;
 import com.xuecheng.framework.domain.course.*;
 import com.xuecheng.framework.domain.course.ext.CourseInfo;
 import com.xuecheng.framework.domain.course.ext.CourseView;
@@ -15,7 +13,6 @@ import com.xuecheng.framework.domain.course.response.CourseCode;
 import com.xuecheng.framework.domain.course.response.CoursePublishResult;
 import com.xuecheng.framework.exception.ExceptionCast;
 import com.xuecheng.framework.model.response.CommonCode;
-import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.manage_course.client.CmsPageClient;
@@ -113,7 +110,7 @@ public class CourseService {
         BeanUtils.copyProperties(teachplan, teachplanNew);
         teachplanNew.setParentid(parentid);
         teachplanNew.setCourseid(courseid);
-        if (grade.equals("1")) {
+        if ("1".equals(grade)) {
             teachplanNew.setGrade("2");//级别，根据父结点的级别来设置
         } else {
             teachplanNew.setGrade("3");
@@ -249,12 +246,12 @@ public class CourseService {
         cmsPage.setTemplateId(publish_templateId);//页面模板id
 
         //远程调用cms
-        CmsPageResult cmsPageResult = cmsPageClient.saveCmsPage(cmsPage);
+        ResponseResult cmsPageResult = cmsPageClient.saveCmsPage(cmsPage);
         if (!cmsPageResult.isSuccess()) {
             return new CoursePublishResult(CommonCode.FAIL, null);
         }
 
-        CmsPage cmsPage1 = cmsPageResult.getCmsPage();
+        CmsPage cmsPage1 = (CmsPage) cmsPageResult.getData();
         String pageId = cmsPage1.getPageId();
         //拼装页面预览的url
         String url = previewUrl + pageId;
@@ -278,7 +275,7 @@ public class CourseService {
         cmsPage.setPageWebPath(publish_page_webpath);//页面webpath
         cmsPage.setTemplateId(publish_templateId);//页面模板id
         //调用cms一键发布接口将课程详情页面发布到服务器
-        CmsPostPageResult cmsPostPageResult = cmsPageClient.postPageQuick(cmsPage);
+        ResponseResult cmsPostPageResult = cmsPageClient.postPageQuick(cmsPage);
         if (!cmsPostPageResult.isSuccess()) {
             return new CoursePublishResult(CommonCode.FAIL, null);
         }
@@ -297,7 +294,7 @@ public class CourseService {
         //缓存课程的信息
         //...
         //得到页面的url
-        String pageUrl = cmsPostPageResult.getPageUrl();
+        String pageUrl = (String) cmsPostPageResult.getData();
         //向teachplanMediaPub中保存课程媒资信息
         saveTeachplanMediaPub(id);
         return new CoursePublishResult(CommonCode.SUCCESS, pageUrl);
@@ -408,7 +405,7 @@ public class CourseService {
         Teachplan teachplan = optional.get();
         //取出等级
         String grade = teachplan.getGrade();
-        if (StringUtils.isEmpty(grade) || !grade.equals("3")) {
+        if (!"3".equals(grade)) {
             //只允许选择第三级的课程计划关联视频
             ExceptionCast.cast(CourseCode.COURSE_MEDIA_TEACHPLAN_GRADEERROR);
         }
@@ -433,7 +430,7 @@ public class CourseService {
     }
 
     //查询我的课程
-    public QueryResponseResult<CourseInfo> findCourseList(String companyId, String userId, int page, int size, CourseListRequest courseListRequest) {
+    public QueryResult<CourseInfo> findCourseList(String companyId, String userId, int page, int size, CourseListRequest courseListRequest) {
         if (courseListRequest == null) {
             courseListRequest = new CourseListRequest();
         }
@@ -447,7 +444,7 @@ public class CourseService {
         QueryResult<CourseInfo> courseIncfoQueryResult = new QueryResult<CourseInfo>();
         courseIncfoQueryResult.setList(list);
         courseIncfoQueryResult.setTotal(total);
-        return new QueryResponseResult<CourseInfo>(CommonCode.SUCCESS, courseIncfoQueryResult);
+        return courseIncfoQueryResult;
     }
 
     public ResponseResult add(CourseBase courseBase) {

@@ -1,5 +1,7 @@
 package com.xuecheng.framework.utils;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.List;
 /**
  * Created by admin on 2018/3/6.
  */
+@Slf4j
 public class Mp4VideoUtil extends VideoUtil {
 
     String ffmpeg_path = "D:\\Program Files\\ffmpeg-20180227-fa0c9d6-win64-static\\bin\\ffmpeg.exe";//ffmpeg的安装位置
@@ -29,8 +32,7 @@ public class Mp4VideoUtil extends VideoUtil {
         String mp4_name = "809694a6a974c35e3a36f36850837d7c.mp4";
         String mp4_path = "F:/develop/upload/8/0/809694a6a974c35e3a36f36850837d7c/";
         Mp4VideoUtil videoUtil = new Mp4VideoUtil(ffmpeg_path, video_path, mp4_name, mp4_path);
-        String s = videoUtil.generateMp4();
-        System.out.println(s);
+        videoUtil.generateMp4();
     }
 
     //清除已生成的mp4
@@ -47,7 +49,7 @@ public class Mp4VideoUtil extends VideoUtil {
      *
      * @return 成功返回success，失败返回控制台日志
      */
-    public String generateMp4() {
+    public Boolean generateMp4() {
         //清除已生成的mp4
         clear_mp4(mp4folder_path + mp4_name);
         /*
@@ -81,17 +83,12 @@ public class Mp4VideoUtil extends VideoUtil {
             builder.redirectErrorStream(true);
             Process p = builder.start();
             outstring = waitFor(p);
-
+            log.info("generate mp4 info: {}", outstring);
         } catch (Exception ex) {
 
             ex.printStackTrace();
 
         }
-        Boolean check_video_time = this.check_video_time(video_path, mp4folder_path + mp4_name);
-        if (!check_video_time) {
-            return outstring;
-        } else {
-            return "success";
-        }
+        return this.check_video_time(video_path, mp4folder_path + mp4_name);
     }
 }

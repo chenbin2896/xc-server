@@ -14,12 +14,11 @@ import java.io.Serializable;
 @ToString
 @Entity
 @Table(name = "course_base")
-//@GenericGenerator(name = "jpa-assigned", strategy = "assigned")
-@GenericGenerator(name = "jpa-uuid", strategy = "uuid")
+@GenericGenerator(name = "snowflake", strategy = "com.xuecheng.framework.utils.IdGenerator")
 public class CourseBase implements Serializable {
     private static final long serialVersionUID = -916357110051689486L;
     @Id
-    @GeneratedValue(generator = "jpa-uuid")
+    @GeneratedValue(generator = "snowflake", strategy = GenerationType.SEQUENCE)
     @Column(length = 32)
     private String id;
     private String name;
