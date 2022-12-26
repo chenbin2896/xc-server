@@ -3,8 +3,6 @@ package com.xuecheng.search.service;
 import com.xuecheng.framework.domain.course.CoursePub;
 import com.xuecheng.framework.domain.course.TeachplanMediaPub;
 import com.xuecheng.framework.domain.search.CourseSearchParam;
-import com.xuecheng.framework.model.response.CommonCode;
-import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.lucene.search.TotalHits;
@@ -251,7 +249,7 @@ public class EsCourseService {
     }
 
     //根据多个课程计划查询课程媒资信息
-    public QueryResponseResult<TeachplanMediaPub> getmedia(String[] teachplanIds) {
+    public QueryResult<TeachplanMediaPub> getmedia(String[] teachplanIds) {
         //定义一个搜索请求对象
         SearchRequest searchRequest = new SearchRequest(media_index);
         //指定type
@@ -299,8 +297,7 @@ public class EsCourseService {
         QueryResult<TeachplanMediaPub> queryResult = new QueryResult<>();
         queryResult.setList(teachplanMediaPubList);
         queryResult.setTotal(total == null ? 0 : total.value);
-        QueryResponseResult<TeachplanMediaPub> queryResponseResult = new QueryResponseResult<>(CommonCode.SUCCESS, queryResult);
-        return queryResponseResult;
+        return queryResult;
 
     }
 }

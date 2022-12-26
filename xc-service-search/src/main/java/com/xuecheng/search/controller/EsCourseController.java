@@ -3,7 +3,6 @@ package com.xuecheng.search.controller;
 import com.xuecheng.api.search.SearchControllerApi;
 import com.xuecheng.framework.domain.course.TeachplanMediaPub;
 import com.xuecheng.framework.domain.search.CourseSearchParam;
-import com.xuecheng.framework.model.response.QueryResponseResult;
 import com.xuecheng.framework.model.response.QueryResult;
 import com.xuecheng.framework.model.response.ResponseResult;
 import com.xuecheng.search.service.EsCourseService;
@@ -40,8 +39,7 @@ public class EsCourseController implements SearchControllerApi {
     public ResponseResult getmedia(@PathVariable("teachplanId") String teachplanId) {
 
         String[] teachplanIds = new String[]{teachplanId};
-        QueryResponseResult<TeachplanMediaPub> queryResponseResult = esCourseService.getmedia(teachplanIds);
-        QueryResult<TeachplanMediaPub> queryResult = queryResponseResult.getQueryResult();
+        QueryResult<TeachplanMediaPub> queryResult = esCourseService.getmedia(teachplanIds);
         return ResponseResult.SUCCESS(queryResult);
     }
 
